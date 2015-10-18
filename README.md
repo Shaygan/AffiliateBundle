@@ -48,7 +48,7 @@ This bundle was designed to just work out of the box. The only thing you have to
 shaygan_affiliate:
     purchase:
         type: percent
-        persent: 30
+        percent: 30
         max_count: 1
 ```
 By default it look for ?ref=REFERRER_ID in URLs the *ref* is configurable
