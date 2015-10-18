@@ -47,7 +47,7 @@ This bundle was designed to just work out of the box. The only thing you have to
 
 shaygan_affiliate:
     purchase:
-        type: persent
+        type: percent
         persent: 30
         max_count: 1
 ```
