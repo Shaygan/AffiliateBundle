@@ -107,8 +107,8 @@ class Affiliate
         $type = $this->config['purchase']['type'];
         $referralRegistration = $this->getUserReferralRegistration($order->getOwnerUser());
         $totalPrice = $order->getTotalPrice();
-        if ($type == "persent") {
-            $commissionAmount = (int) ($totalPrice * ($this->config['purchase']['persent'] / 100));
+        if ($type == "percent") {
+            $commissionAmount = (int) ($totalPrice * ($this->config['purchase']['percent'] / 100));
         } else {
             $commissionAmount = $totalPrice * $this->config['purchase']['amount'];
         }

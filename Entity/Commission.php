@@ -71,7 +71,7 @@ class Commission
     private $type;
 
     const TYPE_FIXED = "fixed";
-    const TYPE_PERSENT = "persent";
+    const TYPE_PERCENT = "percent";
 
     /**
      * Set type
@@ -82,7 +82,7 @@ class Commission
      */
     public function setType($type)
     {
-        if ($type != self::TYPE_FIXED && $type != self::TYPE_PERSENT) {
+        if ($type != self::TYPE_FIXED && $type != self::TYPE_PERCENT) {
             throw new \InvalidArgumentException;
         }
         $this->type = $type;
