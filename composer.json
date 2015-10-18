@@ -1,0 +1,27 @@
+{
+    "name": "shaygan/affiliate-bundle",
+    "type": "symfony-bundle",
+    "description": "A simple Symfony 2 Affiliate Bundle.",
+    "keywords": ["affiliate", "affiliate-bundle", "bundle", "php", "symfony2"],
+    "homepage": "http://i-gh.ir",
+    "license": "MIT",
+    "version": "dev",
+    "authors": [
+        {
+            "name": "Iman Ghasrfakhri",
+            "email": "ghasrfakhri@gmail.com",
+            "homepage": "http://i-gh.ir",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "symfony/framework-bundle": ">=2.2",
+        "friendsofsymfony/user-bundle": "~2.0@dev"
+    },
+    "autoload": {
+        "psr-0": {
+            "Shaygan\\AffiliateBundle": ""
+        }
+    },
+    "target-dir": "Shaygan/AffiliateBundle"
+}

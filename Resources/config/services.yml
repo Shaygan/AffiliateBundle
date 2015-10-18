@@ -1,0 +1,21 @@
+services:
+    shaygan_affiliate.affiliate:
+        class: Shaygan\AffiliateBundle\Model\Affiliate
+        arguments: ["@doctrine.orm.entity_manager","@service_container"]
+    shaygan_affiliate.kernel_response_listener:
+        class: Shaygan\AffiliateBundle\EventListener\KernelEventListener
+        arguments: ["@shaygan_affiliate.affiliate"]
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 0 }
+#    shaygan_affiliate.kernel_request_listener:
+#        class: Shaygan\AffiliateBundle\EventListener\KernelEventListener
+#        arguments: ["@shaygan_affiliate.affiliate"]
+#        tags:
+#            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
+#    
+
+    shaygan_affiliate.registration:
+        class: Shaygan\AffiliateBundle\EventListener\RegistrationListener
+        arguments: ["@shaygan_affiliate.affiliate"]
+        tags:
+            - { name: kernel.event_subscriber } 
