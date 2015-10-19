@@ -27,9 +27,9 @@ class KernelEventListener
 
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        if (!$event->isMasterRequest()) {
-            return;
-        }
+//        if (!$event->isMasterRequest()) {
+//            return;
+//        }
         $this->affiliate->record($event->getResponse());
     }
 
