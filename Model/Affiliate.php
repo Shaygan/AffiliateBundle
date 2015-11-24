@@ -49,6 +49,8 @@ class Affiliate
             $referrerId = (int) $this->getGetParam($this->config['referrer_param_name']);
             if (!$this->session->has($this->config['session_referral_id_param_name'])) {
                 $this->logReferral($referrerId, $response);
+            } else {
+                $this->setCookie($response, $this->session->get($this->config['session_referral_id_param_name']));
             }
         } else {
             if ($this->getRequest()->cookies->has($this->config['cookie_referral_id_param_name'])) {
@@ -73,7 +75,7 @@ class Affiliate
      * next events
      * 
      * @param Response $response
-     * @param User $user
+     * @param User $userhas
      */
     public function recordRegistration(Response $response, User $user)
     {
@@ -180,21 +182,27 @@ class Affiliate
             $referral->setReferrer($referrer);
             $this->em->persist($referral);
             $this->em->flush();
-            $this->setSessionCookie($response, $referral);
+            $this->setSession($referral->getId());
+            $this->setCookie($response, $referral->getId());
         } else {
             $this->createReferrer($referrerId);
             $this->logReferral($referrerId, $response);
         }
     }
 
-    protected function setSessionCookie($response, $referral)
+    protected function setSession($referralId)
     {
-        $this->session->set($this->config['session_referral_id_param_name'], $referral->getId());
+        $this->session->set($this->config['session_referral_id_param_name'], $referralId);
+    }
+
+    protected function setCookie($response, $referralId)
+    {
         $response->headers
                 ->setCookie(new Cookie($this->config['cookie_referral_id_param_name']
-                        , $referral->getId()
+                        , $referralId
                         , time() + $this->config['cookie_expire_in']
                         , $this->config['cookie_path']
+                        , null
                         , $this->config['cookie_secure']
                         , $this->config['cookie_httponly']
                         )
