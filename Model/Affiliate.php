@@ -183,7 +183,7 @@ class Affiliate
             $this->setSessionCookie($response, $referral);
         } else {
             $this->createReferrer($referrerId);
-            $this->logReferral($referrerId);
+            $this->logReferral($referrerId, $response);
         }
     }
 
