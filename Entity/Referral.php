@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * AffiliateLogs
  *
- * @ORM\Table(name="referral")
+ * @ORM\Table(name="affiliate_referral")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
  */

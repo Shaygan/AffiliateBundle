@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Affiliates
  *
- * @ORM\Table(name="commission")
+ * @ORM\Table(name="affiliate_commission")
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
  */
