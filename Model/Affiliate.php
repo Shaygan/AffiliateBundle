@@ -45,8 +45,8 @@ class Affiliate
      */
     function record($response)
     {
-        if ($this->getRequest()->get($this->config['referrer_param_name'])) {
-            $referrerId = (int) $this->request->get($this->config['referrer_param_name']);
+        if ($this->getGetParam($this->config['referrer_param_name'])) {
+            $referrerId = (int) $this->getGetParam($this->config['referrer_param_name']);
             if (!$this->session->has($this->config['session_referral_id_param_name'])) {
                 $this->logReferral($referrerId, $response);
             }
@@ -230,6 +230,11 @@ class Affiliate
     {
         $this->session->remove($this->config['session_referral_id_param_name']);
         $response->headers->clearCookie($this->config['cookie_referral_id_param_name']);
+    }
+
+    protected function getGetParam($key)
+    {
+        return filter_input(INPUT_GET, $key);
     }
 
     /**
