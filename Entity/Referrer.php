@@ -59,6 +59,18 @@ class Referrer
     private $commissions;
 
     /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $this->setCreateAt(new DateTime);
+    }
+
+    /////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -224,4 +236,5 @@ class Referrer
     {
         return $this->commissions;
     }
+
 }
