@@ -231,6 +231,7 @@ class Affiliate
         $reg->setUserId($user->getId());
         $reg->setReferrer($referral->getReferrer());
         $this->em->persist($reg);
+        $this->em->flush();
         return $reg;
     }
 
