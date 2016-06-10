@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Affiliates
  *
  * @ORM\Table(name="affiliate_referrer")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="ReferrerRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class Referrer
@@ -59,18 +59,18 @@ class Referrer
     private $commissions;
 
     /**
-     * @ORM\PrePersist
+     * Constructor
      */
-    public function prePersist()
+    public function __construct()
     {
-        $this->setCreateAt(new \DateTime);
+        $this->referrals = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->commissions = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
      * Set id
      *
      * @param integer $id
-     *
      * @return Referrer
      */
     public function setId($id)
@@ -83,7 +83,7 @@ class Referrer
     /**
      * Get id
      *
-     * @return integer
+     * @return integer 
      */
     public function getId()
     {
@@ -94,8 +94,7 @@ class Referrer
      * Set createAt
      *
      * @param \DateTime $createAt
-     *
-     * @return Affiliate
+     * @return Referrer
      */
     public function setCreateAt($createAt)
     {
@@ -107,7 +106,7 @@ class Referrer
     /**
      * Get createAt
      *
-     * @return \DateTime
+     * @return \DateTime 
      */
     public function getCreateAt()
     {
@@ -118,8 +117,7 @@ class Referrer
      * Set referCount
      *
      * @param integer $referCount
-     *
-     * @return Affiliate
+     * @return Referrer
      */
     public function setReferCount($referCount)
     {
@@ -131,7 +129,7 @@ class Referrer
     /**
      * Get referCount
      *
-     * @return integer
+     * @return integer 
      */
     public function getReferCount()
     {
@@ -142,8 +140,7 @@ class Referrer
      * Set signupCount
      *
      * @param integer $signupCount
-     *
-     * @return Affiliate
+     * @return Referrer
      */
     public function setSignupCount($signupCount)
     {
@@ -155,7 +152,7 @@ class Referrer
     /**
      * Get signupCount
      *
-     * @return integer
+     * @return integer 
      */
     public function getSignupCount()
     {
@@ -163,42 +160,32 @@ class Referrer
     }
 
     /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->referrals = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->commissions = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add referral
+     * Add referrals
      *
-     * @param \Shaygan\AffiliateBundle\Entity\Referral $referral
-     *
+     * @param \Shaygan\AffiliateBundle\Entity\Referral $referrals
      * @return Referrer
      */
-    public function addReferral(\Shaygan\AffiliateBundle\Entity\Referral $referral)
+    public function addReferral(\Shaygan\AffiliateBundle\Entity\Referral $referrals)
     {
-        $this->referrals[] = $referral;
+        $this->referrals[] = $referrals;
 
         return $this;
     }
 
     /**
-     * Remove referral
+     * Remove referrals
      *
-     * @param \Shaygan\AffiliateBundle\Entity\Referral $referral
+     * @param \Shaygan\AffiliateBundle\Entity\Referral $referrals
      */
-    public function removeReferral(\Shaygan\AffiliateBundle\Entity\Referral $referral)
+    public function removeReferral(\Shaygan\AffiliateBundle\Entity\Referral $referrals)
     {
-        $this->referrals->removeElement($referral);
+        $this->referrals->removeElement($referrals);
     }
 
     /**
      * Get referrals
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getReferrals()
     {
@@ -206,37 +193,35 @@ class Referrer
     }
 
     /**
-     * Add commission
+     * Add commissions
      *
-     * @param \Shaygan\AffiliateBundle\Entity\Commission $commission
-     *
+     * @param \Shaygan\AffiliateBundle\Entity\Commission $commissions
      * @return Referrer
      */
-    public function addCommission(\Shaygan\AffiliateBundle\Entity\Commission $commission)
+    public function addCommission(\Shaygan\AffiliateBundle\Entity\Commission $commissions)
     {
-        $this->commissions[] = $commission;
+        $this->commissions[] = $commissions;
 
         return $this;
     }
 
     /**
-     * Remove commission
+     * Remove commissions
      *
-     * @param \Shaygan\AffiliateBundle\Entity\Commission $commission
+     * @param \Shaygan\AffiliateBundle\Entity\Commission $commissions
      */
-    public function removeCommission(\Shaygan\AffiliateBundle\Entity\Commission $commission)
+    public function removeCommission(\Shaygan\AffiliateBundle\Entity\Commission $commissions)
     {
-        $this->commissions->removeElement($commission);
+        $this->commissions->removeElement($commissions);
     }
 
     /**
      * Get commissions
      *
-     * @return \Doctrine\Common\Collections\Collection
+     * @return \Doctrine\Common\Collections\Collection 
      */
     public function getCommissions()
     {
         return $this->commissions;
     }
-
 }

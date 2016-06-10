@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * AffiliateLogs
  *
  * @ORM\Table(name="affiliate_referral")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="ReferralRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class Referral
@@ -52,16 +52,9 @@ class Referral
     /**
      * @var string
      *
-     * @ORM\Column(name="referrer_url", type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="ReferrerUrl")
      */
     private $referrerUrl;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="landing_url", type="string", length=255, nullable=true)
-     */
-    private $landingUrl;
 
     /**
      * @ORM\PrePersist
@@ -71,10 +64,14 @@ class Referral
         $this->setCreateAt(new \DateTime);
     }
 
+    /////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////
+
     /**
      * Get id
      *
-     * @return integer
+     * @return integer 
      */
     public function getId()
     {
@@ -85,7 +82,6 @@ class Referral
      * Set createAt
      *
      * @param \DateTime $createAt
-     *
      * @return Referral
      */
     public function setCreateAt($createAt)
@@ -98,7 +94,7 @@ class Referral
     /**
      * Get createAt
      *
-     * @return \DateTime
+     * @return \DateTime 
      */
     public function getCreateAt()
     {
@@ -106,58 +102,9 @@ class Referral
     }
 
     /**
-     * Set referrerUrl
-     *
-     * @param string $referrerUrl
-     *
-     * @return Referral
-     */
-    public function setReferrerUrl($referrerUrl)
-    {
-        $this->referrerUrl = $referrerUrl;
-
-        return $this;
-    }
-
-    /**
-     * Get referrerUrl
-     *
-     * @return string
-     */
-    public function getReferrerUrl()
-    {
-        return $this->referrerUrl;
-    }
-
-    /**
-     * Set landingUrl
-     *
-     * @param string $landingUrl
-     *
-     * @return Referral
-     */
-    public function setLandingUrl($landingUrl)
-    {
-        $this->landingUrl = $landingUrl;
-
-        return $this;
-    }
-
-    /**
-     * Get landingUrl
-     *
-     * @return string
-     */
-    public function getLandingUrl()
-    {
-        return $this->landingUrl;
-    }
-
-    /**
      * Set referrer
      *
      * @param \Shaygan\AffiliateBundle\Entity\Referrer $referrer
-     *
      * @return Referral
      */
     public function setReferrer(\Shaygan\AffiliateBundle\Entity\Referrer $referrer = null)
@@ -170,7 +117,7 @@ class Referral
     /**
      * Get referrer
      *
-     * @return \Shaygan\AffiliateBundle\Entity\Referrer
+     * @return \Shaygan\AffiliateBundle\Entity\Referrer 
      */
     public function getReferrer()
     {
@@ -200,4 +147,26 @@ class Referral
         return $this->registration;
     }
 
+    /**
+     * Set referrerUrl
+     *
+     * @param \Shaygan\AffiliateBundle\Entity\ReferrerUrl $referrerUrl
+     * @return Referral
+     */
+    public function setReferrerUrl(\Shaygan\AffiliateBundle\Entity\ReferrerUrl $referrerUrl = null)
+    {
+        $this->referrerUrl = $referrerUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get referrerUrl
+     *
+     * @return \Shaygan\AffiliateBundle\Entity\ReferrerUrl 
+     */
+    public function getReferrerUrl()
+    {
+        return $this->referrerUrl;
+    }
 }

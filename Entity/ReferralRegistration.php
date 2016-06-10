@@ -101,10 +101,11 @@ class ReferralRegistration
     /////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////
+
     /**
      * Get id
      *
-     * @return integer
+     * @return integer 
      */
     public function getId()
     {
@@ -115,8 +116,7 @@ class ReferralRegistration
      * Set createAt
      *
      * @param \DateTime $createAt
-     *
-     * @return Registration
+     * @return ReferralRegistration
      */
     public function setCreateAt($createAt)
     {
@@ -128,7 +128,7 @@ class ReferralRegistration
     /**
      * Get createAt
      *
-     * @return \DateTime
+     * @return \DateTime 
      */
     public function getCreateAt()
     {
@@ -139,8 +139,7 @@ class ReferralRegistration
      * Set userId
      *
      * @param integer $userId
-     *
-     * @return Registration
+     * @return ReferralRegistration
      */
     public function setUserId($userId)
     {
@@ -152,7 +151,7 @@ class ReferralRegistration
     /**
      * Get userId
      *
-     * @return integer
+     * @return integer 
      */
     public function getUserId()
     {
@@ -160,35 +159,10 @@ class ReferralRegistration
     }
 
     /**
-     * Set referrer
-     *
-     * @param \Shaygan\AffiliateBundle\Entity\Referrer $referrer
-     *
-     * @return Registration
-     */
-    public function setReferrer(\Shaygan\AffiliateBundle\Entity\Referrer $referrer = null)
-    {
-        $this->referrer = $referrer;
-
-        return $this;
-    }
-
-    /**
-     * Get referrer
-     *
-     * @return \Shaygan\AffiliateBundle\Entity\Referrer
-     */
-    public function getReferrer()
-    {
-        return $this->referrer;
-    }
-
-    /**
      * Set dipositCount
      *
      * @param integer $dipositCount
-     *
-     * @return Registration
+     * @return ReferralRegistration
      */
     public function setDipositCount($dipositCount)
     {
@@ -200,7 +174,7 @@ class ReferralRegistration
     /**
      * Get dipositCount
      *
-     * @return integer
+     * @return integer 
      */
     public function getDipositCount()
     {
@@ -211,8 +185,7 @@ class ReferralRegistration
      * Set purchaseCount
      *
      * @param integer $purchaseCount
-     *
-     * @return Registration
+     * @return ReferralRegistration
      */
     public function setPurchaseCount($purchaseCount)
     {
@@ -224,13 +197,12 @@ class ReferralRegistration
     /**
      * Get purchaseCount
      *
-     * @return integer
+     * @return integer 
      */
     public function getPurchaseCount()
     {
         return $this->purchaseCount;
     }
-
 
     /**
      * Set referral
@@ -253,5 +225,28 @@ class ReferralRegistration
     public function getReferral()
     {
         return $this->referral;
+    }
+
+    /**
+     * Set referrer
+     *
+     * @param \Shaygan\AffiliateBundle\Entity\Referrer $referrer
+     * @return ReferralRegistration
+     */
+    public function setReferrer(\Shaygan\AffiliateBundle\Entity\Referrer $referrer = null)
+    {
+        $this->referrer = $referrer;
+
+        return $this;
+    }
+
+    /**
+     * Get referrer
+     *
+     * @return \Shaygan\AffiliateBundle\Entity\Referrer 
+     */
+    public function getReferrer()
+    {
+        return $this->referrer;
     }
 }

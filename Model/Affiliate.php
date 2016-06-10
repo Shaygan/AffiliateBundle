@@ -169,6 +169,30 @@ class Affiliate
                         ->findOneBy(array("userId" => $user->getId()));
     }
 
+    private function getReferrerUrl()
+    {
+
+        if (isset($_SERVER['HTTP_REFERER'])) {
+            $url = $_SERVER['HTTP_REFERER'];
+            $referrerUrl = $this->em->getRepository("ShayganAffiliateBundle:ReferrerUrl")->findOneByUrl($url);
+            if ($referrerUrl) {
+                $q = $this->em->createQuery('UPDATE ShayganAffiliateBundle:ReferrerUrl r SET r.referCount=r.referCount+1 WHERE r.id = :id');
+                $q->setParameters(array(
+                    'id' => $referrerUrl->getId(),
+                ));
+                $q->execute();
+                return $referrerUrl;
+            } else {
+                $referrerUrl = new \Shaygan\AffiliateBundle\Entity\ReferrerUrl();
+                $referrerUrl->setUrl($url);
+                $referrerUrl->setReferCount(1);
+                $this->em->persist($referrerUrl);
+                return $referrerUrl;
+            }
+        }
+        return null;
+    }
+
     protected function logReferral($referrerId, Response $response)
     {
         $q = $this->em->createQuery('UPDATE ShayganAffiliateBundle:Referrer r SET r.referCount=r.referCount+1 WHERE r.id = :referrerId');
@@ -180,6 +204,7 @@ class Affiliate
             $referrer = $this->em->getRepository("ShayganAffiliateBundle:Referrer")->find($referrerId);
             $referral = new Referral();
             $referral->setReferrer($referrer);
+            $referral->setReferrerUrl($this->getReferrerUrl());
             $this->em->persist($referral);
             $this->em->flush();
             $this->setSession($referral->getId());
