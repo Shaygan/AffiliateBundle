@@ -43,6 +43,13 @@ class Referral
     private $referrer;
 
     /**
+     * @var integer
+     *
+     * @ORM\OneToOne(targetEntity="ReferralRegistration", mappedBy="referral")
+     */
+    private $registration;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="referrer_url", type="string", length=255, nullable=true)
@@ -168,6 +175,29 @@ class Referral
     public function getReferrer()
     {
         return $this->referrer;
+    }
+
+    /**
+     * Set registration
+     *
+     * @param \Shaygan\AffiliateBundle\Entity\ReferralRegistration $registration
+     * @return Referral
+     */
+    public function setRegistration(\Shaygan\AffiliateBundle\Entity\ReferralRegistration $registration = null)
+    {
+        $this->registration = $registration;
+
+        return $this;
+    }
+
+    /**
+     * Get registration
+     *
+     * @return \Shaygan\AffiliateBundle\Entity\ReferralRegistration 
+     */
+    public function getRegistration()
+    {
+        return $this->registration;
     }
 
 }

@@ -230,6 +230,7 @@ class Affiliate
         $reg = new ReferralRegistration();
         $reg->setUserId($user->getId());
         $reg->setReferrer($referral->getReferrer());
+        $reg->setReferral($referral);
         $this->em->persist($reg);
         $this->em->flush();
         return $reg;

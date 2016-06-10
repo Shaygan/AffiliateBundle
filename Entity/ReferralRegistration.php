@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
  * AffiliateLogs
  *
  * @ORM\Table(name="affiliate_referral_registration")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="ReferralRegistrationRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class ReferralRegistration
@@ -34,6 +34,13 @@ class ReferralRegistration
      * @ORM\Column(name="create_at", type="datetime", nullable=false)
      */
     private $createAt;
+
+    /**
+     * @var integer
+     *
+     * @ORM\OneToOne(targetEntity="Referral", inversedBy="registration")
+     */
+    private $referral;
 
     /**
      * @var integer
@@ -224,4 +231,27 @@ class ReferralRegistration
         return $this->purchaseCount;
     }
 
+
+    /**
+     * Set referral
+     *
+     * @param \Shaygan\AffiliateBundle\Entity\Referral $referral
+     * @return ReferralRegistration
+     */
+    public function setReferral(\Shaygan\AffiliateBundle\Entity\Referral $referral = null)
+    {
+        $this->referral = $referral;
+
+        return $this;
+    }
+
+    /**
+     * Get referral
+     *
+     * @return \Shaygan\AffiliateBundle\Entity\Referral 
+     */
+    public function getReferral()
+    {
+        return $this->referral;
+    }
 }
