@@ -2,6 +2,9 @@
 
 namespace Shaygan\AffiliateBundle\Entity;
 
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -28,7 +31,7 @@ class Referrer
     private $id;
 
     /**
-     * @var \DateTime
+     * @var DateTime
      *
      * @ORM\Column(name="create_at", type="datetime", nullable=false)
      */
@@ -75,8 +78,8 @@ class Referrer
      */
     public function __construct()
     {
-        $this->referrals = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->commissions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->referrals = new ArrayCollection();
+        $this->commissions = new ArrayCollection();
     }
 
     /**
@@ -105,7 +108,7 @@ class Referrer
     /**
      * Set createAt
      *
-     * @param \DateTime $createAt
+     * @param DateTime $createAt
      * @return Referrer
      */
     public function setCreateAt($createAt)
@@ -118,7 +121,7 @@ class Referrer
     /**
      * Get createAt
      *
-     * @return \DateTime 
+     * @return DateTime 
      */
     public function getCreateAt()
     {
@@ -174,10 +177,10 @@ class Referrer
     /**
      * Add referrals
      *
-     * @param \Shaygan\AffiliateBundle\Entity\Referral $referrals
+     * @param Referral $referrals
      * @return Referrer
      */
-    public function addReferral(\Shaygan\AffiliateBundle\Entity\Referral $referrals)
+    public function addReferral(Referral $referrals)
     {
         $this->referrals[] = $referrals;
 
@@ -187,9 +190,9 @@ class Referrer
     /**
      * Remove referrals
      *
-     * @param \Shaygan\AffiliateBundle\Entity\Referral $referrals
+     * @param Referral $referrals
      */
-    public function removeReferral(\Shaygan\AffiliateBundle\Entity\Referral $referrals)
+    public function removeReferral(Referral $referrals)
     {
         $this->referrals->removeElement($referrals);
     }
@@ -197,7 +200,7 @@ class Referrer
     /**
      * Get referrals
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return Collection 
      */
     public function getReferrals()
     {
@@ -207,10 +210,10 @@ class Referrer
     /**
      * Add commissions
      *
-     * @param \Shaygan\AffiliateBundle\Entity\Commission $commissions
+     * @param Commission $commissions
      * @return Referrer
      */
-    public function addCommission(\Shaygan\AffiliateBundle\Entity\Commission $commissions)
+    public function addCommission(Commission $commissions)
     {
         $this->commissions[] = $commissions;
 
@@ -220,9 +223,9 @@ class Referrer
     /**
      * Remove commissions
      *
-     * @param \Shaygan\AffiliateBundle\Entity\Commission $commissions
+     * @param Commission $commissions
      */
-    public function removeCommission(\Shaygan\AffiliateBundle\Entity\Commission $commissions)
+    public function removeCommission(Commission $commissions)
     {
         $this->commissions->removeElement($commissions);
     }
@@ -230,7 +233,7 @@ class Referrer
     /**
      * Get commissions
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return Collection 
      */
     public function getCommissions()
     {
