@@ -91,11 +91,15 @@ class Affiliate
         }
     }
 
-    public function getPurchaseCommission(OrderInterface $order)
+    /**
+     * 
+     * @return \Shaygan\AffiliateBundle\Entity\Commission
+     * @return type
+     */
+    public function getPurchaseCommission(OrderInterface $order, $program = "default")
     {
-        if ($this->isPurchaseEligible($order->getOwnerUser())) {
-
-            $commission = $this->createCommissionEntity($order);
+        if ($this->isPurchaseEligible($order->getOwnerUser(), $program)) {
+            $commission = $this->createCommissionEntity($order, $program);
             $this->em->persist($commission);
             $this->em->flush();
             return $commission;
@@ -104,16 +108,32 @@ class Affiliate
         }
     }
 
-    protected function createCommissionEntity(OrderInterface $order)
+    /**
+     * 
+     * @param \Shaygan\AffiliateBundle\Model\OrderInterface $order
+     * @return \Shaygan\AffiliateBundle\Entity\Commission
+     */
+    protected function createCommissionEntity(OrderInterface $order, $program)
     {
-        $type = $this->config['purchase']['type'];
+        $type = $this->config['programs'][$program]['type'];
         $referralRegistration = $this->getUserReferralRegistration($order->getOwnerUser());
         $totalPrice = $order->getTotalPrice();
-        if ($type == "percent") {
-            $commissionAmount = (int) ($totalPrice * ($this->config['purchase']['percent'] / 100));
+        if ($type == "percentage") {
+            if ($this->isFirstPurchase()) {
+                $commissionAmount = (int) ($totalPrice * ($this->config['programs'][$program]['first_commission_percent'] / 100));
+            } else {
+                $commissionAmount = (int) ($totalPrice * ($this->config['programs'][$program]['commission_percent'] / 100));
+            }
+        } elseif ($type == "fixed-price") {
+            if ($this->isFirstPurchase()) {
+                $commissionAmount = $totalPrice * $this->config['programs'][$program]['first_commission_amount'];
+            } else {
+                $commissionAmount = $totalPrice * $this->config['programs'][$program]['commission_amount'];
+            }
         } else {
-            $commissionAmount = $totalPrice * $this->config['purchase']['amount'];
+            throw new \Exception("Invalid commission type.");
         }
+
         $commission = new \Shaygan\AffiliateBundle\Entity\Commission;
         $commission->setType($type);
         $commission->setOrderId($order->getId());
@@ -136,7 +156,7 @@ class Affiliate
         }
     }
 
-    protected function isPurchaseEligible(User $user)
+    protected function isPurchaseEligible(User $user, $program)
     {
         $reg = $this->getUserReferralRegistration($user);
 
@@ -144,11 +164,22 @@ class Affiliate
             return false;
         }
 
-        if ($reg->getPurchaseCount() < $this->config['purchase']['max_count']) {
+        if ($reg->getPurchaseCount() < $this->config['programs'][$program]['max_count']) {
             return true;
         } else {
             return false;
         }
+    }
+
+    protected function isFirstPurchase(User $user, $program)
+    {
+        $reg = $this->getUserReferralRegistration($user);
+
+        if ($reg === null) {
+            return false;
+        }
+
+        return $reg->getPurchaseCount() == 1;
     }
 
     protected function purchaseCommissionPaied(User $user)
