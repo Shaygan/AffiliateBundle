@@ -330,7 +330,6 @@ class Commission
         return $this->referralRegistration;
     }
 
-
     /**
      * Set commission
      *
@@ -354,4 +353,5 @@ class Commission
     {
         return $this->commission;
     }
+
 }
