@@ -135,8 +135,10 @@ class Affiliate
         }
 
         $commission = new \Shaygan\AffiliateBundle\Entity\Commission;
+        $commission->setProgram($program);
         $commission->setType($type);
         $commission->setOrderId($order->getId());
+        $commission->setReferralRegistration($referralRegistration);
         $commission->setReferrer($referralRegistration->getReferrer());
         $commission->setTotalAmount($totalPrice);
         $commission->setCommissionAmount($commissionAmount);

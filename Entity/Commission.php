@@ -45,6 +45,13 @@ class Commission
     /**
      * @var integer
      *
+     * @ORM\ManyToOne(targetEntity="ReferralRegistration")
+     */
+    private $referralRegistration;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="total_amount", type="integer", nullable=false)
      */
     private $totalAmount;
@@ -62,6 +69,13 @@ class Commission
      * @ORM\Column(name="order_id", type="integer", nullable=false)
      */
     private $orderId;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="program", type="string", nullable=false)
+     */
+    private $program;
 
     /**
      * @var integer
@@ -261,4 +275,52 @@ class Commission
         return $this->type;
     }
 
+
+    /**
+     * Set program
+     *
+     * @param string $program
+     *
+     * @return Commission
+     */
+    public function setProgram($program)
+    {
+        $this->program = $program;
+
+        return $this;
+    }
+
+    /**
+     * Get program
+     *
+     * @return string
+     */
+    public function getProgram()
+    {
+        return $this->program;
+    }
+
+    /**
+     * Set referralRegistration
+     *
+     * @param \Shaygan\AffiliateBundle\Entity\ReferralRegistration $referralRegistration
+     *
+     * @return Commission
+     */
+    public function setReferralRegistration(\Shaygan\AffiliateBundle\Entity\ReferralRegistration $referralRegistration = null)
+    {
+        $this->referralRegistration = $referralRegistration;
+
+        return $this;
+    }
+
+    /**
+     * Get referralRegistration
+     *
+     * @return \Shaygan\AffiliateBundle\Entity\ReferralRegistration
+     */
+    public function getReferralRegistration()
+    {
+        return $this->referralRegistration;
+    }
 }
