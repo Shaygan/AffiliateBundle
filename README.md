@@ -76,7 +76,7 @@ ShayganAffiliateBundel tracks FOSUserBundle registrations automatically and afte
   $em = $this->getDoctrine()->getManager();
   $em->persist($order);
   $em->flush();
-  $affiliate = $this->get("shaygan_affiliate.affiliate");
+  $affiliate = $this->get("shaygan_affiliate");
   $commission = $affiliate->getPurchaseCommission($order);
   if(null !== $commission){
     $commissionAmount = $commission->getCommissionAmount();
