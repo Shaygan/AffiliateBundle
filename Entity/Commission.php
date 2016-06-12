@@ -66,6 +66,13 @@ class Commission
     /**
      * @var integer
      *
+     * @ORM\Column(name="commission", type="float", nullable=false)
+     */
+    private $commission;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="order_id", type="integer", nullable=false)
      */
     private $orderId;
@@ -275,7 +282,6 @@ class Commission
         return $this->type;
     }
 
-
     /**
      * Set program
      *
@@ -322,5 +328,30 @@ class Commission
     public function getReferralRegistration()
     {
         return $this->referralRegistration;
+    }
+
+
+    /**
+     * Set commission
+     *
+     * @param float $commission
+     *
+     * @return Commission
+     */
+    public function setCommission($commission)
+    {
+        $this->commission = $commission;
+
+        return $this;
+    }
+
+    /**
+     * Get commission
+     *
+     * @return float
+     */
+    public function getCommission()
+    {
+        return $this->commission;
     }
 }
