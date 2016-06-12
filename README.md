@@ -1,6 +1,6 @@
 ShayganAffiliateBundle
 ===================
-**Notice: this bundle is under heavy development**
+**Notice: this bundle is under heavy development do not use it in production**
 
 A simple **Symfony 2 Affiliate Bundle**.
 

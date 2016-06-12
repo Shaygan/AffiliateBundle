@@ -11,7 +11,7 @@ interface OrderInterface
 
     public function getId();
 
-    public function getOwnerUser();
+    public function getReferredUser();
 
     public function getTotalPrice();
 }
