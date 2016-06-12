@@ -46,10 +46,17 @@ This bundle was designed to just work out of the box. The only thing you have to
 # app/config/config.yml
 
 shaygan_affiliate:
-    purchase:
-        type: percent
-        percent: 30
-        max_count: 1
+    programs:
+        membership_upgrade:
+            type: fixed-amount
+            first_commission_amount: 3
+            commission_amount: 1
+            max_count: 10
+        purchase:
+            type: percentage
+            first_commission_percent: 15
+            commission_percent: 10
+            max_count: 10
 ```
 By default it look for ?ref=REFERRER_ID in URLs the *ref* is configurable
 
@@ -73,7 +80,7 @@ ShayganAffiliateBundel tracks FOSUserBundle registrations automatically and afte
   $commission = $affiliate->getPurchaseCommission($order);
   if(null !== $commission){
     $commissionAmount = $commission->getCommissionAmount();
-    $referrer = $commisiion->getReferrer();
+    $referrer = $commission->getReferrer();
     $referrerUserId = $referrer->getId()
     // You can apply the commission amount to the accont of referrer User here
     // ...
