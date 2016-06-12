@@ -72,7 +72,7 @@ ShayganAffiliateBundel tracks FOSUserBundle registrations automatically and afte
   $affiliate = $this->get("shaygan_affiliate.affiliate");
   $commission = $affiliate->getPurchaseCommission($order);
   if(null !== $commission){
-    $commissionAmount = $commisiion->getCommissionAmount();
+    $commissionAmount = $commission->getCommissionAmount();
     $referrer = $commisiion->getReferrer();
     $referrerUserId = $referrer->getId()
     // You can apply the commission amount to the accont of referrer User here
