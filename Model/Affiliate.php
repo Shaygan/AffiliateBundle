@@ -121,14 +121,18 @@ class Affiliate
         if ($type == "percentage") {
             if ($this->isFirstPurchase($order->getReferredUser(), $program)) {
                 $commissionAmount = (int) ($totalPrice * ($this->config['programs'][$program]['first_commission_percent'] / 100));
+                $commissionValue = $this->config['programs'][$program]['first_commission_percent'];
             } else {
                 $commissionAmount = (int) ($totalPrice * ($this->config['programs'][$program]['commission_percent'] / 100));
+                $commissionValue = $this->config['programs'][$program]['commission_percent'];
             }
         } elseif ($type == "fixed-price") {
             if ($this->isFirstPurchase()) {
-                $commissionAmount = $totalPrice * $this->config['programs'][$program]['first_commission_amount'];
+                $commissionAmount = $this->config['programs'][$program]['first_commission_amount'];
+                $commissionValue = $this->config['programs'][$program]['first_commission_amount'];
             } else {
-                $commissionAmount = $totalPrice * $this->config['programs'][$program]['commission_amount'];
+                $commissionAmount = $this->config['programs'][$program]['first_commission_amount'];
+                $commissionValue = $this->config['programs'][$program]['first_commission_amount'];
             }
         } else {
             throw new \Exception("Invalid commission type.");
@@ -142,6 +146,7 @@ class Affiliate
         $commission->setReferrer($referralRegistration->getReferrer());
         $commission->setTotalAmount($totalPrice);
         $commission->setCommissionAmount($commissionAmount);
+        $commission->setCommission($commissionValue);
 
         $referralRegistration->incPurchaseCount();
 
