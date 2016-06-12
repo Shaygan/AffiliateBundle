@@ -98,7 +98,7 @@ class Affiliate
      */
     public function getPurchaseCommission(OrderInterface $order, $program = "default")
     {
-        if ($this->isPurchaseEligible($order->getOwnerUser(), $program)) {
+        if ($this->isPurchaseEligible($order->getReferredUser(), $program)) {
             $commission = $this->createCommissionEntity($order, $program);
             $this->em->persist($commission);
             $this->em->flush();
@@ -116,10 +116,10 @@ class Affiliate
     protected function createCommissionEntity(OrderInterface $order, $program)
     {
         $type = $this->config['programs'][$program]['type'];
-        $referralRegistration = $this->getUserReferralRegistration($order->getOwnerUser());
+        $referralRegistration = $this->getUserReferralRegistration($order->getReferredUser());
         $totalPrice = $order->getTotalPrice();
         if ($type == "percentage") {
-            if ($this->isFirstPurchase()) {
+            if ($this->isFirstPurchase($order->getReferredUser(), $program)) {
                 $commissionAmount = (int) ($totalPrice * ($this->config['programs'][$program]['first_commission_percent'] / 100));
             } else {
                 $commissionAmount = (int) ($totalPrice * ($this->config['programs'][$program]['commission_percent'] / 100));
@@ -179,7 +179,7 @@ class Affiliate
             return false;
         }
 
-        return $reg->getPurchaseCount() == 1;
+        return $reg->getPurchaseCount() == 0;
     }
 
     protected function purchaseCommissionPaied(User $user)
