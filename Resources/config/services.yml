@@ -1,5 +1,5 @@
 services:
-    shaygan_affiliate.affiliate:
+    shaygan_affiliate:
         class: Shaygan\AffiliateBundle\Model\Affiliate
         arguments: ["@doctrine.orm.entity_manager","@service_container"]
     shaygan_affiliate.kernel_response_listener:
