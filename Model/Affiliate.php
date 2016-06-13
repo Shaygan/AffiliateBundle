@@ -127,10 +127,8 @@ class Affiliate
         $commission->setReferralRegistration($referralRegistration);
         $commission->setReferrer($referralRegistration->getReferrer());
         $commission->setPurchaseAmount($purchasePrice);
-        $commission->setCommissionAmount($this->getCommissionAmount($order));
-        $commission->setCommission($this->getCommissionValue($order));
-
-        $referralRegistration->incPurchaseCount();
+        $commission->setCommissionAmount($this->getCommissionAmount($order, $program));
+        $commission->setCommission($this->getCommissionValue($order, $program));
 
         return $commission;
     }
@@ -138,7 +136,7 @@ class Affiliate
     private function getCommissionAmount($order, $program)
     {
         $type = $this->config['programs'][$program]['type'];
-        $totalPrice = $order->getTotalPrice();
+        $totalPrice = $order->getPurchasePrice();
         if ($type == "percentage") {
             if ($this->isFirstPurchase($order->getReferredUser(), $program)) {
                 $commissionAmount = (int) ($totalPrice * ($this->config['programs'][$program]['first_commission_percent'] / 100));
