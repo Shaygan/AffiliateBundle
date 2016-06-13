@@ -97,7 +97,7 @@ class Affiliate
      * @return \Shaygan\AffiliateBundle\Entity\Purchase
      * @return type
      */
-    public function getPurchaseCommission(OrderInterface $order, $program = "default")
+    public function getPurchaseCommission(PurchaseInterface $order, $program = "default")
     {
         if ($this->isPurchaseEligible($order->getReferredUser(), $program)) {
             $commission = $this->createCommissionEntity($order, $program);
@@ -115,10 +115,10 @@ class Affiliate
 
     /**
      * 
-     * @param \Shaygan\AffiliateBundle\Model\OrderInterface $order
+     * @param \Shaygan\AffiliateBundle\Model\PurchaseInterface $order
      * @return \Shaygan\AffiliateBundle\Entity\Purchase
      */
-    protected function createCommissionEntity(OrderInterface $order, $program)
+    protected function createCommissionEntity(PurchaseInterface $order, $program)
     {
         $type = $this->config['programs'][$program]['type'];
         $referralRegistration = $this->getUserReferralRegistration($order->getReferredUser());

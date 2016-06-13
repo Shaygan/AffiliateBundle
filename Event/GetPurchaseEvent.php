@@ -2,7 +2,7 @@
 
 namespace Shaygan\AffiliateBundle\Event;
 
-use Shaygan\AffiliateBundle\Model\OrderInterface;
+use Shaygan\AffiliateBundle\Model\PurchaseInterface;
 use Symfony\Component\EventDispatcher\Event;
 
 /**
@@ -14,14 +14,14 @@ class GetPurchaseEvent extends Event
 
     private $order;
 
-    public function __construct(OrderInterface $order)
+    public function __construct(PurchaseInterface $order)
     {
         $this->order = $order;
     }
 
     /**
      * 
-     * @return OrderInterface
+     * @return PurchaseInterface
      */
     public function getOrder()
     {

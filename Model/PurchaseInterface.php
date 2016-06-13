@@ -6,7 +6,8 @@ namespace Shaygan\AffiliateBundle\Model;
  *
  * @author Iman Ghasrfakhri <ghasrfakhri@gmail.com>
  */
-interface OrderInterface
+
+interface PurchaseInterface
 {
 
     public function getId();
