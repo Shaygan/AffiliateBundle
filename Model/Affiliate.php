@@ -117,7 +117,7 @@ class Affiliate
     {
         $type = $this->config['programs'][$program]['type'];
         $referralRegistration = $this->getUserReferralRegistration($order->getReferredUser());
-        $purchasePrice = $order->getPurchaselPrice();
+        $purchasePrice = $order->getPurchasePrice();
 
 
         $commission = new \Shaygan\AffiliateBundle\Entity\Commission;
