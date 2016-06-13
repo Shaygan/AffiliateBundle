@@ -12,20 +12,20 @@ use Symfony\Component\EventDispatcher\Event;
 class GetPurchaseEvent extends Event
 {
 
-    private $order;
+    private $purchase;
 
-    public function __construct(PurchaseInterface $order)
+    public function __construct(\Shaygan\AffiliateBundle\Entity\Purchase $purchase)
     {
-        $this->order = $order;
+        $this->purchase = $purchase;
     }
 
     /**
      * 
-     * @return PurchaseInterface
+     * @return \Shaygan\AffiliateBundle\Entity\Purchase
      */
-    public function getOrder()
+    public function getPurchase()
     {
-        return $this->order;
+        return $this->purchase;
     }
 
 }

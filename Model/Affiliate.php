@@ -100,12 +100,12 @@ class Affiliate
     public function getPurchaseCommission(PurchaseInterface $order, $program = "default")
     {
         if ($this->isPurchaseEligible($order->getReferredUser(), $program)) {
-            $commission = $this->createCommissionEntity($order, $program);
+            $commission = $this->createPurchaseEntity($order, $program);
             $this->em->persist($commission);
             $this->em->flush();
             $this->getDispatcher()->dispatch(
-                    ShayganAffiliateEvents::REGISTER_COMPLETED
-                    , new GetReferralRegistrationEvent($referral, $user)
+                    ShayganAffiliateEvents::PURCHASE_COMPLETED
+                    , new GetPurchaseEvent($commission)
             );
             return $commission;
         } else {
@@ -118,24 +118,24 @@ class Affiliate
      * @param \Shaygan\AffiliateBundle\Model\PurchaseInterface $order
      * @return \Shaygan\AffiliateBundle\Entity\Purchase
      */
-    protected function createCommissionEntity(PurchaseInterface $order, $program)
+    protected function createPurchaseEntity(PurchaseInterface $order, $program)
     {
         $type = $this->config['programs'][$program]['type'];
         $referralRegistration = $this->getUserReferralRegistration($order->getReferredUser());
         $purchasePrice = $order->getPurchasePrice();
 
 
-        $commission = new \Shaygan\AffiliateBundle\Entity\Purchase;
-        $commission->setProgram($program);
-        $commission->setType($type);
-        $commission->setOrderId($order->getId());
-        $commission->setReferralRegistration($referralRegistration);
-        $commission->setReferrer($referralRegistration->getReferrer());
-        $commission->setPurchaseAmount($purchasePrice);
-        $commission->setCommissionAmount($this->getCommissionAmount($order, $program));
-        $commission->setCommission($this->getCommissionValue($order, $program));
+        $parchase = new \Shaygan\AffiliateBundle\Entity\Purchase;
+        $parchase->setProgram($program);
+        $parchase->setType($type);
+        $parchase->setOrderId($order->getId());
+        $parchase->setReferralRegistration($referralRegistration);
+        $parchase->setReferrer($referralRegistration->getReferrer());
+        $parchase->setPurchaseAmount($purchasePrice);
+        $parchase->setCommissionAmount($this->getCommissionAmount($order, $program));
+        $parchase->setCommission($this->getCommissionValue($order, $program));
 
-        return $commission;
+        return $parchase;
     }
 
     private function getCommissionAmount($order, $program)
