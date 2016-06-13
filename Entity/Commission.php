@@ -12,7 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Affiliates
  *
- * @ORM\Table(name="affiliate_commission")
+ * @ORM\Table(name="affiliate_commission",
+ *              indexes={
+ *                      @ORM\Index(name="program", columns={"program"}),
+ *              }
+ * )
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
  */
@@ -45,7 +49,7 @@ class Commission
     /**
      * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="ReferralRegistration")
+     * @ORM\ManyToOne(targetEntity="ReferralRegistration", inversedBy="commissions")
      */
     private $referralRegistration;
 
@@ -128,19 +132,22 @@ class Commission
         $this->setCreateAt(new \DateTime);
     }
 
-    /**
-     * Set id
-     *
-     * @param integer $id
-     *
-     * @return Commission
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-
-        return $this;
-    }
+//    /**
+//     * Set id
+//     *
+//     * @param integer $id
+//     *
+//     * @return Commission
+//     */
+//    public function setId($id)
+//    {
+//        $this->id = $id;
+//
+//        return $this;
+//    }
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 
     /**
      * Get id
@@ -174,54 +181,6 @@ class Commission
     public function getCreateAt()
     {
         return $this->createAt;
-    }
-
-    /**
-     * Set orderId
-     *
-     * @param integer $orderId
-     *
-     * @return Commission
-     */
-    public function setOrderId($orderId)
-    {
-        $this->orderId = $orderId;
-
-        return $this;
-    }
-
-    /**
-     * Get orderId
-     *
-     * @return integer
-     */
-    public function getOrderId()
-    {
-        return $this->orderId;
-    }
-
-    /**
-     * Set referrer
-     *
-     * @param \Shaygan\AffiliateBundle\Entity\Referrer $referrer
-     *
-     * @return Commission
-     */
-    public function setReferrer(\Shaygan\AffiliateBundle\Entity\Referrer $referrer = null)
-    {
-        $this->referrer = $referrer;
-
-        return $this;
-    }
-
-    /**
-     * Get referrer
-     *
-     * @return \Shaygan\AffiliateBundle\Entity\Referrer
-     */
-    public function getReferrer()
-    {
-        return $this->referrer;
     }
 
     /**
@@ -273,13 +232,51 @@ class Commission
     }
 
     /**
-     * Get type
+     * Set commission
      *
-     * @return string
+     * @param float $commission
+     *
+     * @return Commission
      */
-    public function getType()
+    public function setCommission($commission)
     {
-        return $this->type;
+        $this->commission = $commission;
+
+        return $this;
+    }
+
+    /**
+     * Get commission
+     *
+     * @return float
+     */
+    public function getCommission()
+    {
+        return $this->commission;
+    }
+
+    /**
+     * Set orderId
+     *
+     * @param integer $orderId
+     *
+     * @return Commission
+     */
+    public function setOrderId($orderId)
+    {
+        $this->orderId = $orderId;
+
+        return $this;
+    }
+
+    /**
+     * Get orderId
+     *
+     * @return integer
+     */
+    public function getOrderId()
+    {
+        return $this->orderId;
     }
 
     /**
@@ -307,6 +304,40 @@ class Commission
     }
 
     /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set referrer
+     *
+     * @param \Shaygan\AffiliateBundle\Entity\Referrer $referrer
+     *
+     * @return Commission
+     */
+    public function setReferrer(\Shaygan\AffiliateBundle\Entity\Referrer $referrer = null)
+    {
+        $this->referrer = $referrer;
+
+        return $this;
+    }
+
+    /**
+     * Get referrer
+     *
+     * @return \Shaygan\AffiliateBundle\Entity\Referrer
+     */
+    public function getReferrer()
+    {
+        return $this->referrer;
+    }
+
+    /**
      * Set referralRegistration
      *
      * @param \Shaygan\AffiliateBundle\Entity\ReferralRegistration $referralRegistration
@@ -329,29 +360,4 @@ class Commission
     {
         return $this->referralRegistration;
     }
-
-    /**
-     * Set commission
-     *
-     * @param float $commission
-     *
-     * @return Commission
-     */
-    public function setCommission($commission)
-    {
-        $this->commission = $commission;
-
-        return $this;
-    }
-
-    /**
-     * Get commission
-     *
-     * @return float
-     */
-    public function getCommission()
-    {
-        return $this->commission;
-    }
-
 }

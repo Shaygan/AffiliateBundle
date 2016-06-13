@@ -52,23 +52,16 @@ class ReferralRegistration
     /**
      * @var integer
      *
+     * @ORM\OneToMany(targetEntity="Commission", mappedBy="referralRegistration")
+     */
+    private $commissions;
+
+    /**
+     * @var integer
+     *
      * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
     private $userId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="diposit_count", type="integer", nullable=false)
-     */
-    private $dipositCount = 0;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="purchase_count", type="integer", nullable=false)
-     */
-    private $purchaseCount = 0;
 
     /**
      * @ORM\PrePersist
@@ -78,34 +71,34 @@ class ReferralRegistration
         $this->setCreateAt(new \DateTime);
     }
 
-    /**
-     * inc dipositCount
-     *
-     * @return integer
-     */
-    public function incDipositCount()
+    public function getPurchaseCountByProgram($progam)
     {
-        return ++$this->dipositCount;
+        $criteria = Criteria::create()->where(Criteria::expr()->eq("program", $progam));
+        $programCommissions = $this->commissions->matching($criteria);
+        return $programCommissions->count();
     }
 
-    /**
-     * inc purchaseCount
-     *
-     * @return integer
-     */
-    public function incPurchaseCount()
+    public function getPurchaseCount()
     {
-        return ++$this->purchaseCount;
+        return $this->commissions->count();
     }
 
-    /////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////
-    /////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->commissions = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -116,6 +109,7 @@ class ReferralRegistration
      * Set createAt
      *
      * @param \DateTime $createAt
+     *
      * @return ReferralRegistration
      */
     public function setCreateAt($createAt)
@@ -128,7 +122,7 @@ class ReferralRegistration
     /**
      * Get createAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreateAt()
     {
@@ -139,6 +133,7 @@ class ReferralRegistration
      * Set userId
      *
      * @param integer $userId
+     *
      * @return ReferralRegistration
      */
     public function setUserId($userId)
@@ -151,7 +146,7 @@ class ReferralRegistration
     /**
      * Get userId
      *
-     * @return integer 
+     * @return integer
      */
     public function getUserId()
     {
@@ -159,55 +154,10 @@ class ReferralRegistration
     }
 
     /**
-     * Set dipositCount
-     *
-     * @param integer $dipositCount
-     * @return ReferralRegistration
-     */
-    public function setDipositCount($dipositCount)
-    {
-        $this->dipositCount = $dipositCount;
-
-        return $this;
-    }
-
-    /**
-     * Get dipositCount
-     *
-     * @return integer 
-     */
-    public function getDipositCount()
-    {
-        return $this->dipositCount;
-    }
-
-    /**
-     * Set purchaseCount
-     *
-     * @param integer $purchaseCount
-     * @return ReferralRegistration
-     */
-    public function setPurchaseCount($purchaseCount)
-    {
-        $this->purchaseCount = $purchaseCount;
-
-        return $this;
-    }
-
-    /**
-     * Get purchaseCount
-     *
-     * @return integer 
-     */
-    public function getPurchaseCount()
-    {
-        return $this->purchaseCount;
-    }
-
-    /**
      * Set referral
      *
      * @param \Shaygan\AffiliateBundle\Entity\Referral $referral
+     *
      * @return ReferralRegistration
      */
     public function setReferral(\Shaygan\AffiliateBundle\Entity\Referral $referral = null)
@@ -220,7 +170,7 @@ class ReferralRegistration
     /**
      * Get referral
      *
-     * @return \Shaygan\AffiliateBundle\Entity\Referral 
+     * @return \Shaygan\AffiliateBundle\Entity\Referral
      */
     public function getReferral()
     {
@@ -231,6 +181,7 @@ class ReferralRegistration
      * Set referrer
      *
      * @param \Shaygan\AffiliateBundle\Entity\Referrer $referrer
+     *
      * @return ReferralRegistration
      */
     public function setReferrer(\Shaygan\AffiliateBundle\Entity\Referrer $referrer = null)
@@ -243,10 +194,44 @@ class ReferralRegistration
     /**
      * Get referrer
      *
-     * @return \Shaygan\AffiliateBundle\Entity\Referrer 
+     * @return \Shaygan\AffiliateBundle\Entity\Referrer
      */
     public function getReferrer()
     {
         return $this->referrer;
+    }
+
+    /**
+     * Add commission
+     *
+     * @param \Shaygan\AffiliateBundle\Entity\Commission $commission
+     *
+     * @return ReferralRegistration
+     */
+    public function addCommission(\Shaygan\AffiliateBundle\Entity\Commission $commission)
+    {
+        $this->commissions[] = $commission;
+
+        return $this;
+    }
+
+    /**
+     * Remove commission
+     *
+     * @param \Shaygan\AffiliateBundle\Entity\Commission $commission
+     */
+    public function removeCommission(\Shaygan\AffiliateBundle\Entity\Commission $commission)
+    {
+        $this->commissions->removeElement($commission);
+    }
+
+    /**
+     * Get commissions
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCommissions()
+    {
+        return $this->commissions;
     }
 }

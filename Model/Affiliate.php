@@ -118,25 +118,7 @@ class Affiliate
         $type = $this->config['programs'][$program]['type'];
         $referralRegistration = $this->getUserReferralRegistration($order->getReferredUser());
         $totalPrice = $order->getTotalPrice();
-        if ($type == "percentage") {
-            if ($this->isFirstPurchase($order->getReferredUser(), $program)) {
-                $commissionAmount = (int) ($totalPrice * ($this->config['programs'][$program]['first_commission_percent'] / 100));
-                $commissionValue = $this->config['programs'][$program]['first_commission_percent'];
-            } else {
-                $commissionAmount = (int) ($totalPrice * ($this->config['programs'][$program]['commission_percent'] / 100));
-                $commissionValue = $this->config['programs'][$program]['commission_percent'];
-            }
-        } elseif ($type == "fixed-price") {
-            if ($this->isFirstPurchase()) {
-                $commissionAmount = $this->config['programs'][$program]['first_commission_amount'];
-                $commissionValue = $this->config['programs'][$program]['first_commission_amount'];
-            } else {
-                $commissionAmount = $this->config['programs'][$program]['first_commission_amount'];
-                $commissionValue = $this->config['programs'][$program]['first_commission_amount'];
-            }
-        } else {
-            throw new \Exception("Invalid commission type.");
-        }
+
 
         $commission = new \Shaygan\AffiliateBundle\Entity\Commission;
         $commission->setProgram($program);
@@ -145,12 +127,57 @@ class Affiliate
         $commission->setReferralRegistration($referralRegistration);
         $commission->setReferrer($referralRegistration->getReferrer());
         $commission->setTotalAmount($totalPrice);
-        $commission->setCommissionAmount($commissionAmount);
-        $commission->setCommission($commissionValue);
+        $commission->setCommissionAmount($this->getCommissionAmount($order));
+        $commission->setCommission($this->getCommissionValue($order));
 
         $referralRegistration->incPurchaseCount();
 
         return $commission;
+    }
+
+    private function getCommissionAmount($order, $program)
+    {
+        $type = $this->config['programs'][$program]['type'];
+        $totalPrice = $order->getTotalPrice();
+        if ($type == "percentage") {
+            if ($this->isFirstPurchase($order->getReferredUser(), $program)) {
+                $commissionAmount = (int) ($totalPrice * ($this->config['programs'][$program]['first_commission_percent'] / 100));
+            } else {
+                $commissionAmount = (int) ($totalPrice * ($this->config['programs'][$program]['commission_percent'] / 100));
+            }
+        } elseif ($type == "fixed-price") {
+            if ($this->isFirstPurchase()) {
+                $commissionAmount = $this->config['programs'][$program]['first_commission_amount'];
+            } else {
+                $commissionAmount = $this->config['programs'][$program]['first_commission_amount'];
+            }
+        } else {
+            throw new \Exception("Invalid commission type.");
+        }
+
+        return $commissionAmount;
+    }
+
+    private function getCommissionValue($order, $program)
+    {
+        $type = $this->config['programs'][$program]['type'];
+        if ($type == "percentage") {
+            if ($this->isFirstPurchase($order->getReferredUser(), $program)) {
+                $commissionValue = $this->config['programs'][$program]['first_commission_percent'];
+            } else {
+                $commissionValue = $this->config['programs'][$program]['commission_percent'];
+            }
+        } elseif ($type == "fixed-price") {
+            if ($this->isFirstPurchase()) {
+                $commissionValue = $this->config['programs'][$program]['first_commission_amount'];
+            } else {
+                $commissionValue = $this->config['programs'][$program]['first_commission_amount'];
+            }
+        } else {
+            throw new \Exception("Invalid commission type.");
+        }
+
+        return $commissionValue;
     }
 
     public function getReferrerIfPurchaseCommissionEligible(User $user)
@@ -171,7 +198,7 @@ class Affiliate
             return false;
         }
 
-        if ($reg->getPurchaseCount() < $this->config['programs'][$program]['max_count']) {
+        if ($reg->getPurchaseCountByProgram($program) < $this->config['programs'][$program]['max_count']) {
             return true;
         } else {
             return false;
@@ -186,14 +213,7 @@ class Affiliate
             return false;
         }
 
-        return $reg->getPurchaseCount() == 0;
-    }
-
-    protected function purchaseCommissionPaied(User $user)
-    {
-        $reg = $this->getUserReferralRegistration($user);
-        $reg->incPurchaseCount();
-        $this->em->flush();
+        return $reg->getPurchaseCountByProgram($program) == 0;
     }
 
     /**
