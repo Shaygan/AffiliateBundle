@@ -56,9 +56,9 @@ class Commission
     /**
      * @var integer
      *
-     * @ORM\Column(name="total_amount", type="integer", nullable=false)
+     * @ORM\Column(name="purchase_amount", type="integer", nullable=false)
      */
-    private $totalAmount;
+    private $purchaseAmount;
 
     /**
      * @var integer
@@ -149,6 +149,7 @@ class Commission
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
 
+
     /**
      * Get id
      *
@@ -184,27 +185,27 @@ class Commission
     }
 
     /**
-     * Set totalAmount
+     * Set purchaseAmount
      *
-     * @param integer $totalAmount
+     * @param integer $purchaseAmount
      *
      * @return Commission
      */
-    public function setTotalAmount($totalAmount)
+    public function setPurchaseAmount($purchaseAmount)
     {
-        $this->totalAmount = $totalAmount;
+        $this->purchaseAmount = $purchaseAmount;
 
         return $this;
     }
 
     /**
-     * Get totalAmount
+     * Get purchaseAmount
      *
      * @return integer
      */
-    public function getTotalAmount()
+    public function getPurchaseAmount()
     {
-        return $this->totalAmount;
+        return $this->purchaseAmount;
     }
 
     /**

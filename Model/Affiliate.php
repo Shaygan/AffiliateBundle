@@ -117,7 +117,7 @@ class Affiliate
     {
         $type = $this->config['programs'][$program]['type'];
         $referralRegistration = $this->getUserReferralRegistration($order->getReferredUser());
-        $totalPrice = $order->getTotalPrice();
+        $purchasePrice = $order->getPurchaselPrice();
 
 
         $commission = new \Shaygan\AffiliateBundle\Entity\Commission;
@@ -126,7 +126,7 @@ class Affiliate
         $commission->setOrderId($order->getId());
         $commission->setReferralRegistration($referralRegistration);
         $commission->setReferrer($referralRegistration->getReferrer());
-        $commission->setTotalAmount($totalPrice);
+        $commission->setPurchaseAmount($purchasePrice);
         $commission->setCommissionAmount($this->getCommissionAmount($order));
         $commission->setCommission($this->getCommissionValue($order));
 
