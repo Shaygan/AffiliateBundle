@@ -3,6 +3,9 @@
 namespace Shaygan\AffiliateBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use \Doctrine\Common\Collections\Criteria;
+use \Doctrine\Common\Collections\ArrayCollection;
+use DateTime;
 
 /**
  *
@@ -68,7 +71,7 @@ class ReferralRegistration
      */
     public function prePersist()
     {
-        $this->setCreateAt(new \DateTime);
+        $this->setCreateAt(new DateTime);
     }
 
     public function getPurchaseCountByProgram($progam)
@@ -92,7 +95,7 @@ class ReferralRegistration
      */
     public function __construct()
     {
-        $this->commissions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->commissions = new ArrayCollection();
     }
 
     /**
@@ -234,4 +237,5 @@ class ReferralRegistration
     {
         return $this->commissions;
     }
+
 }
