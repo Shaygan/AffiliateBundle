@@ -55,7 +55,7 @@ class ReferralRegistration
     /**
      * @var integer
      *
-     * @ORM\OneToMany(targetEntity="Commission", mappedBy="referralRegistration")
+     * @ORM\OneToMany(targetEntity="Purchase", mappedBy="referralRegistration")
      */
     private $commissions;
 
@@ -207,11 +207,11 @@ class ReferralRegistration
     /**
      * Add commission
      *
-     * @param \Shaygan\AffiliateBundle\Entity\Commission $commission
+     * @param \Shaygan\AffiliateBundle\Entity\Purchase $commission
      *
      * @return ReferralRegistration
      */
-    public function addCommission(\Shaygan\AffiliateBundle\Entity\Commission $commission)
+    public function addCommission(\Shaygan\AffiliateBundle\Entity\Purchase $commission)
     {
         $this->commissions[] = $commission;
 
@@ -221,9 +221,9 @@ class ReferralRegistration
     /**
      * Remove commission
      *
-     * @param \Shaygan\AffiliateBundle\Entity\Commission $commission
+     * @param \Shaygan\AffiliateBundle\Entity\Purchase $commission
      */
-    public function removeCommission(\Shaygan\AffiliateBundle\Entity\Commission $commission)
+    public function removeCommission(\Shaygan\AffiliateBundle\Entity\Purchase $commission)
     {
         $this->commissions->removeElement($commission);
     }

@@ -11,6 +11,6 @@ class ShayganAffiliateEvents
 {
 
     const REGISTER_COMPLETED = "shaygan_affiliate.register_completed";
+    const PURCHASE_COMPLETED = "shaygan_affiliate.purchase_completed";
 
-//    const PURCHASE_COMPLETED = "shaygan_affiliate.purchase_completed";
 }

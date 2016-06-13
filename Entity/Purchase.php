@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
  */
-class Commission
+class Purchase
 {
 
     /**
@@ -103,7 +103,7 @@ class Commission
      *
      * @param string $type
      *
-     * @return Commission
+     * @return Purchase
      */
     public function setType($type)
     {
@@ -165,7 +165,7 @@ class Commission
      *
      * @param \DateTime $createAt
      *
-     * @return Commission
+     * @return Purchase
      */
     public function setCreateAt($createAt)
     {
@@ -189,7 +189,7 @@ class Commission
      *
      * @param integer $purchaseAmount
      *
-     * @return Commission
+     * @return Purchase
      */
     public function setPurchaseAmount($purchaseAmount)
     {
@@ -213,7 +213,7 @@ class Commission
      *
      * @param integer $commissionAmount
      *
-     * @return Commission
+     * @return Purchase
      */
     public function setCommissionAmount($commissionAmount)
     {
@@ -237,7 +237,7 @@ class Commission
      *
      * @param float $commission
      *
-     * @return Commission
+     * @return Purchase
      */
     public function setCommission($commission)
     {
@@ -261,7 +261,7 @@ class Commission
      *
      * @param integer $orderId
      *
-     * @return Commission
+     * @return Purchase
      */
     public function setOrderId($orderId)
     {
@@ -285,7 +285,7 @@ class Commission
      *
      * @param string $program
      *
-     * @return Commission
+     * @return Purchase
      */
     public function setProgram($program)
     {
@@ -319,7 +319,7 @@ class Commission
      *
      * @param \Shaygan\AffiliateBundle\Entity\Referrer $referrer
      *
-     * @return Commission
+     * @return Purchase
      */
     public function setReferrer(\Shaygan\AffiliateBundle\Entity\Referrer $referrer = null)
     {
@@ -343,7 +343,7 @@ class Commission
      *
      * @param \Shaygan\AffiliateBundle\Entity\ReferralRegistration $referralRegistration
      *
-     * @return Commission
+     * @return Purchase
      */
     public function setReferralRegistration(\Shaygan\AffiliateBundle\Entity\ReferralRegistration $referralRegistration = null)
     {

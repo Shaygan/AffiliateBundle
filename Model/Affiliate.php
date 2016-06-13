@@ -8,6 +8,7 @@ use Shaygan\AffiliateBundle\Entity\Referral;
 use Shaygan\AffiliateBundle\Entity\Referrer;
 use Shaygan\AffiliateBundle\Entity\ReferralRegistration;
 use Shaygan\AffiliateBundle\Event\GetReferralRegistrationEvent;
+use Shaygan\AffiliateBundle\Event\GetPurchaseEvent;
 use Shaygan\AffiliateBundle\ShayganAffiliateEvents;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -93,7 +94,7 @@ class Affiliate
 
     /**
      * 
-     * @return \Shaygan\AffiliateBundle\Entity\Commission
+     * @return \Shaygan\AffiliateBundle\Entity\Purchase
      * @return type
      */
     public function getPurchaseCommission(OrderInterface $order, $program = "default")
@@ -102,6 +103,10 @@ class Affiliate
             $commission = $this->createCommissionEntity($order, $program);
             $this->em->persist($commission);
             $this->em->flush();
+            $this->getDispatcher()->dispatch(
+                    ShayganAffiliateEvents::REGISTER_COMPLETED
+                    , new GetReferralRegistrationEvent($referral, $user)
+            );
             return $commission;
         } else {
             return null;
@@ -111,7 +116,7 @@ class Affiliate
     /**
      * 
      * @param \Shaygan\AffiliateBundle\Model\OrderInterface $order
-     * @return \Shaygan\AffiliateBundle\Entity\Commission
+     * @return \Shaygan\AffiliateBundle\Entity\Purchase
      */
     protected function createCommissionEntity(OrderInterface $order, $program)
     {
@@ -120,7 +125,7 @@ class Affiliate
         $purchasePrice = $order->getPurchasePrice();
 
 
-        $commission = new \Shaygan\AffiliateBundle\Entity\Commission;
+        $commission = new \Shaygan\AffiliateBundle\Entity\Purchase;
         $commission->setProgram($program);
         $commission->setType($type);
         $commission->setOrderId($order->getId());

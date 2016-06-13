@@ -57,7 +57,7 @@ class Referrer
     private $referrals;
 
     /**
-     * @ORM\OneToMany(targetEntity="Commission", mappedBy="referrer")
+     * @ORM\OneToMany(targetEntity="Purchase", mappedBy="referrer")
      */
     private $commissions;
 
@@ -210,10 +210,10 @@ class Referrer
     /**
      * Add commissions
      *
-     * @param Commission $commissions
+     * @param Purchase $commissions
      * @return Referrer
      */
-    public function addCommission(Commission $commissions)
+    public function addCommission(Purchase $commissions)
     {
         $this->commissions[] = $commissions;
 
@@ -223,9 +223,9 @@ class Referrer
     /**
      * Remove commissions
      *
-     * @param Commission $commissions
+     * @param Purchase $commissions
      */
-    public function removeCommission(Commission $commissions)
+    public function removeCommission(Purchase $commissions)
     {
         $this->commissions->removeElement($commissions);
     }
