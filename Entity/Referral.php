@@ -57,6 +57,13 @@ class Referral
     private $registration;
 
     /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="ReferrerUrl")
+     */
+    private $referrerUrl;
+
+    /**
      * @var integer
      *
      * @ORM\Column(name="hit_id", type="bigint", nullable=true)
@@ -205,4 +212,28 @@ class Referral
         return $this->registration;
     }
 
+
+    /**
+     * Set referrerUrl
+     *
+     * @param \Shaygan\AffiliateBundle\Entity\ReferrerUrl $referrerUrl
+     *
+     * @return Referral
+     */
+    public function setReferrerUrl(\Shaygan\AffiliateBundle\Entity\ReferrerUrl $referrerUrl = null)
+    {
+        $this->referrerUrl = $referrerUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get referrerUrl
+     *
+     * @return \Shaygan\AffiliateBundle\Entity\ReferrerUrl
+     */
+    public function getReferrerUrl()
+    {
+        return $this->referrerUrl;
+    }
 }

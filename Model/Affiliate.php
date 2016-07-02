@@ -254,6 +254,14 @@ class Affiliate
         return null;
     }
 
+    private function getReferralIp()
+    {
+        if (isset($_SERVER['REMOTE_ADDR'])) {
+            return $_SERVER['REMOTE_ADDR'];
+        }
+        return null;
+    }
+
     protected function logReferral($referrerId, Response $response)
     {
         $q = $this->em->createQuery('UPDATE ShayganAffiliateBundle:Referrer r SET r.referCount=r.referCount+1 WHERE r.id = :referrerId');
@@ -265,7 +273,8 @@ class Affiliate
             $referrer = $this->em->getRepository("ShayganAffiliateBundle:Referrer")->find($referrerId);
             $referral = new Referral();
             $referral->setReferrer($referrer);
-//            $referral->setReferrerUrl($this->getReferrerUrl());
+            $referral->setReferrerUrl($this->getReferrerUrl());
+            $referral->setIp($this->getReferralIp());
             $this->em->persist($referral);
             $this->em->flush();
             $this->setSession($referral->getId());
