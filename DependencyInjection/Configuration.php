@@ -23,6 +23,8 @@ class Configuration implements ConfigurationInterface
         $rootNode
                 ->children()
                 /**/->scalarNode("referrer_param_name")->defaultValue("ref")->end()
+                /**/->arrayNode("referrer_alternative_param_names")
+                /*  */->prototype('scalar')->end()->end()
                 /**/->scalarNode("session_referral_id_param_name")->defaultValue("pca_affiliate")->end()
                 /**/->scalarNode("cookie_referral_id_param_name")->defaultValue("pca_affiliate")->end()
                 /**/->scalarNode("cookie_expire_in")->defaultValue("2592000")->end()

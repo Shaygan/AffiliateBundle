@@ -46,8 +46,8 @@ class Affiliate
      */
     function record($response)
     {
-        if ($this->getGetParam($this->config['referrer_param_name'])) {
-            $referrerId = (int) $this->getGetParam($this->config['referrer_param_name']);
+        $referrerId = (int) $this->getRefParam();
+        if ($referrerId) {
             if (!$this->session->has($this->config['session_referral_id_param_name'])) {
                 $this->logReferral($referrerId, $response);
             } else {
@@ -265,7 +265,7 @@ class Affiliate
             $referrer = $this->em->getRepository("ShayganAffiliateBundle:Referrer")->find($referrerId);
             $referral = new Referral();
             $referral->setReferrer($referrer);
-            $referral->setReferrerUrl($this->getReferrerUrl());
+//            $referral->setReferrerUrl($this->getReferrerUrl());
             $this->em->persist($referral);
             $this->em->flush();
             $this->setSession($referral->getId());
@@ -328,9 +328,19 @@ class Affiliate
         $response->headers->clearCookie($this->config['cookie_referral_id_param_name']);
     }
 
-    protected function getGetParam($key)
+    protected function getRefParam()
     {
-        return filter_input(INPUT_GET, $key);
+        $key = $this->config['referrer_param_name'];
+        if (filter_input(INPUT_GET, $key, FILTER_VALIDATE_INT) > 0) {
+            return filter_input(INPUT_GET, $key, FILTER_VALIDATE_INT);
+        }
+
+        $altKeys = $this->config['referrer_alternative_param_names'];
+        foreach ($altKeys as $key) {
+            if (filter_input(INPUT_GET, $key, FILTER_VALIDATE_INT) > 0) {
+                return filter_input(INPUT_GET, $key, FILTER_VALIDATE_INT);
+            }
+        }
     }
 
     /**

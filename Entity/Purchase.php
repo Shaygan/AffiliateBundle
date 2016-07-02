@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Affiliates
  *
- * @ORM\Table(name="affiliate_commission",
+ * @ORM\Table(name="affiliate_purchase",
  *              indexes={
  *                      @ORM\Index(name="program", columns={"program"}),
  *              }

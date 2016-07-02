@@ -36,6 +36,13 @@ class Referral
     private $createAt;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="ip", type="string", nullable=true)
+     */
+    private $ip;
+
+    /**
      * @var integer
      *
      * @ORM\ManyToOne(targetEntity="Referrer", inversedBy="referrals")
@@ -50,11 +57,11 @@ class Referral
     private $registration;
 
     /**
-     * @var string
+     * @var integer
      *
-     * @ORM\ManyToOne(targetEntity="ReferrerUrl")
+     * @ORM\Column(name="hit_id", type="bigint", nullable=true)
      */
-    private $referrerUrl;
+    private $hitId;
 
     /**
      * @ORM\PrePersist
@@ -71,7 +78,7 @@ class Referral
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -82,6 +89,7 @@ class Referral
      * Set createAt
      *
      * @param \DateTime $createAt
+     *
      * @return Referral
      */
     public function setCreateAt($createAt)
@@ -94,7 +102,7 @@ class Referral
     /**
      * Get createAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreateAt()
     {
@@ -102,9 +110,58 @@ class Referral
     }
 
     /**
+     * Set ip
+     *
+     * @param string $ip
+     *
+     * @return Referral
+     */
+    public function setIp($ip)
+    {
+        $this->ip = $ip;
+
+        return $this;
+    }
+
+    /**
+     * Get ip
+     *
+     * @return string
+     */
+    public function getIp()
+    {
+        return $this->ip;
+    }
+
+    /**
+     * Set hitId
+     *
+     * @param integer $hitId
+     *
+     * @return Referral
+     */
+    public function setHitId($hitId)
+    {
+        $this->hitId = $hitId;
+
+        return $this;
+    }
+
+    /**
+     * Get hitId
+     *
+     * @return integer
+     */
+    public function getHitId()
+    {
+        return $this->hitId;
+    }
+
+    /**
      * Set referrer
      *
      * @param \Shaygan\AffiliateBundle\Entity\Referrer $referrer
+     *
      * @return Referral
      */
     public function setReferrer(\Shaygan\AffiliateBundle\Entity\Referrer $referrer = null)
@@ -117,7 +174,7 @@ class Referral
     /**
      * Get referrer
      *
-     * @return \Shaygan\AffiliateBundle\Entity\Referrer 
+     * @return \Shaygan\AffiliateBundle\Entity\Referrer
      */
     public function getReferrer()
     {
@@ -128,6 +185,7 @@ class Referral
      * Set registration
      *
      * @param \Shaygan\AffiliateBundle\Entity\ReferralRegistration $registration
+     *
      * @return Referral
      */
     public function setRegistration(\Shaygan\AffiliateBundle\Entity\ReferralRegistration $registration = null)
@@ -140,33 +198,11 @@ class Referral
     /**
      * Get registration
      *
-     * @return \Shaygan\AffiliateBundle\Entity\ReferralRegistration 
+     * @return \Shaygan\AffiliateBundle\Entity\ReferralRegistration
      */
     public function getRegistration()
     {
         return $this->registration;
     }
 
-    /**
-     * Set referrerUrl
-     *
-     * @param \Shaygan\AffiliateBundle\Entity\ReferrerUrl $referrerUrl
-     * @return Referral
-     */
-    public function setReferrerUrl(\Shaygan\AffiliateBundle\Entity\ReferrerUrl $referrerUrl = null)
-    {
-        $this->referrerUrl = $referrerUrl;
-
-        return $this;
-    }
-
-    /**
-     * Get referrerUrl
-     *
-     * @return \Shaygan\AffiliateBundle\Entity\ReferrerUrl 
-     */
-    public function getReferrerUrl()
-    {
-        return $this->referrerUrl;
-    }
 }
