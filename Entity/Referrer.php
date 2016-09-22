@@ -19,8 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity(repositoryClass="ReferrerRepository")
  * @ORM\HasLifecycleCallbacks()
  */
-class Referrer
-{
+class Referrer {
 
     /**
      * @var integer
@@ -64,9 +63,19 @@ class Referrer
     /**
      * @ORM\PrePersist
      */
-    public function prePersist()
-    {
+    public function prePersist() {
         $this->setCreateAt(new DateTime);
+    }
+
+    /**
+     * Inc signupCount
+     *
+     * @return Referrer
+     */
+    public function incSignupCount() {
+        $this->signupCount++;
+
+        return $this;
     }
 
     /////////////////////////////////////////////////////////
@@ -76,8 +85,7 @@ class Referrer
     /**
      * Constructor
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->referrals = new ArrayCollection();
         $this->commissions = new ArrayCollection();
     }
@@ -88,8 +96,7 @@ class Referrer
      * @param integer $id
      * @return Referrer
      */
-    public function setId($id)
-    {
+    public function setId($id) {
         $this->id = $id;
 
         return $this;
@@ -100,8 +107,7 @@ class Referrer
      *
      * @return integer 
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
     }
 
@@ -111,8 +117,7 @@ class Referrer
      * @param DateTime $createAt
      * @return Referrer
      */
-    public function setCreateAt($createAt)
-    {
+    public function setCreateAt($createAt) {
         $this->createAt = $createAt;
 
         return $this;
@@ -123,8 +128,7 @@ class Referrer
      *
      * @return DateTime 
      */
-    public function getCreateAt()
-    {
+    public function getCreateAt() {
         return $this->createAt;
     }
 
@@ -134,8 +138,7 @@ class Referrer
      * @param integer $referCount
      * @return Referrer
      */
-    public function setReferCount($referCount)
-    {
+    public function setReferCount($referCount) {
         $this->referCount = $referCount;
 
         return $this;
@@ -146,8 +149,7 @@ class Referrer
      *
      * @return integer 
      */
-    public function getReferCount()
-    {
+    public function getReferCount() {
         return $this->referCount;
     }
 
@@ -157,8 +159,7 @@ class Referrer
      * @param integer $signupCount
      * @return Referrer
      */
-    public function setSignupCount($signupCount)
-    {
+    public function setSignupCount($signupCount) {
         $this->signupCount = $signupCount;
 
         return $this;
@@ -169,8 +170,7 @@ class Referrer
      *
      * @return integer 
      */
-    public function getSignupCount()
-    {
+    public function getSignupCount() {
         return $this->signupCount;
     }
 
@@ -180,8 +180,7 @@ class Referrer
      * @param Referral $referrals
      * @return Referrer
      */
-    public function addReferral(Referral $referrals)
-    {
+    public function addReferral(Referral $referrals) {
         $this->referrals[] = $referrals;
 
         return $this;
@@ -192,8 +191,7 @@ class Referrer
      *
      * @param Referral $referrals
      */
-    public function removeReferral(Referral $referrals)
-    {
+    public function removeReferral(Referral $referrals) {
         $this->referrals->removeElement($referrals);
     }
 
@@ -202,8 +200,7 @@ class Referrer
      *
      * @return Collection 
      */
-    public function getReferrals()
-    {
+    public function getReferrals() {
         return $this->referrals;
     }
 
@@ -213,8 +210,7 @@ class Referrer
      * @param Purchase $commissions
      * @return Referrer
      */
-    public function addCommission(Purchase $commissions)
-    {
+    public function addCommission(Purchase $commissions) {
         $this->commissions[] = $commissions;
 
         return $this;
@@ -225,8 +221,7 @@ class Referrer
      *
      * @param Purchase $commissions
      */
-    public function removeCommission(Purchase $commissions)
-    {
+    public function removeCommission(Purchase $commissions) {
         $this->commissions->removeElement($commissions);
     }
 
@@ -235,8 +230,7 @@ class Referrer
      *
      * @return Collection 
      */
-    public function getCommissions()
-    {
+    public function getCommissions() {
         return $this->commissions;
     }
 
