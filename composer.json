@@ -1,8 +1,8 @@
 {
     "name": "shaygan/affiliate-bundle",
     "type": "symfony-bundle",
-    "description": "A simple Symfony 2 Affiliate Bundle.",
-    "keywords": ["affiliate", "affiliate-bundle", "bundle", "php", "symfony2"],
+    "description": "A simple Symfony 2 and 3 Affiliate Bundle.",
+    "keywords": ["affiliate", "affiliate-bundle", "bundle", "php", "symfony2", "symfony3"],
     "homepage": "http://i-gh.ir",
     "license": "MIT",
     "version": "dev",
