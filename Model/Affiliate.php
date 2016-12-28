@@ -119,7 +119,7 @@ class Affiliate
 
     public function getRegistrationCountByUser(User $user)
     {
-        return $this->getEm()->getRepository('ShayganAffiliateBundle:ReferralRegistration')->getRegistrationCountByUser($user);
+        return $this->em->getRepository('ShayganAffiliateBundle:ReferralRegistration')->getRegistrationCountByUser($user);
     }
 
     /**
