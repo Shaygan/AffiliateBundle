@@ -28,6 +28,7 @@ class ReferralRegistrationRepository extends EntityRepository
     {
         return $this->_em
                         ->createQuery('SELECT COUNT(*) FROM ShayganAffiliateBundle:ReferralRegistration rr '
+                                . 'JOIN rr.referrer r '
                                 . 'WHERE r.id=:id ')
                         ->setParameter("id", $user->getId())
                         ->getSingleScalarResult()
