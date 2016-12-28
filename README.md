@@ -2,7 +2,7 @@ ShayganAffiliateBundle
 ===================
 **Notice: this bundle is under heavy development do not use it in production**
 
-A simple **Symfony 2 Affiliate Bundle**.
+A simple **Symfony 2 and 3 Affiliate Bundle**.
 
 This FOSUserBundle compatible Bundle tracks referrals with query string 
 parameter and detect referred registrations via cookie. You can easil ask
