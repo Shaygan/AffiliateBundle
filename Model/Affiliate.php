@@ -117,6 +117,11 @@ class Affiliate
         }
     }
 
+    public function getRegistrationCountByUser(User $user)
+    {
+        return $this->getEm()->getRepository('ShayganAffiliateBundle:ReferralRegistration')->getRegistrationCountByUser($user);
+    }
+
     /**
      * 
      * @param \Shaygan\AffiliateBundle\Model\PurchaseInterface $order
