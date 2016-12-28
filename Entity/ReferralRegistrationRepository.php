@@ -16,7 +16,7 @@ class ReferralRegistrationRepository extends EntityRepository
     public function getRegistrationByUser($user)
     {
         return $this->_em
-                        ->createQuery('SELECT rr,r FROM ShayganAffiliateBundle:ReferralRegistration rr '
+                        ->createQuery('SELECT rr FROM ShayganAffiliateBundle:ReferralRegistration rr '
                                 . 'JOIN rr.referrer r '
                                 . 'WHERE r.id=:id '
                                 . 'ORDER BY rr.id DESC ')
@@ -27,7 +27,7 @@ class ReferralRegistrationRepository extends EntityRepository
     public function getRegistrationCountByUser($user)
     {
         return $this->_em
-                        ->createQuery('SELECT COUNT(*) FROM ShayganAffiliateBundle:ReferralRegistration rr '
+                        ->createQuery('SELECT COUNT(rr) FROM ShayganAffiliateBundle:ReferralRegistration rr '
                                 . 'JOIN rr.referrer r '
                                 . 'WHERE r.id=:id ')
                         ->setParameter("id", $user->getId())
