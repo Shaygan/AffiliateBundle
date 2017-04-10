@@ -88,13 +88,12 @@ class Affiliate
             $referral = $this->getReferral();
             if ($referral->getRegistration() == null) {
                 $this->saveRegistrationLog($user, $referral);
+                $this->getDispatcher()->dispatch(
+                        ShayganAffiliateEvents::REGISTER_COMPLETED
+                        , new GetReferralRegistrationEvent($referral, $user)
+                );
             }
             $this->clearReferral($response);
-
-            $this->getDispatcher()->dispatch(
-                    ShayganAffiliateEvents::REGISTER_COMPLETED
-                    , new GetReferralRegistrationEvent($referral, $user)
-            );
         }
     }
 
