@@ -86,7 +86,9 @@ class Affiliate
     {
         if ($this->hasReferral()) {
             $referral = $this->getReferral();
-            $this->saveRegistrationLog($user, $referral);
+            if ($referral->getRegistration() == null) {
+                $this->saveRegistrationLog($user, $referral);
+            }
             $this->clearReferral($response);
 
             $this->getDispatcher()->dispatch(
@@ -335,6 +337,7 @@ class Affiliate
         $reg->setUserId($user->getId());
         $reg->setReferrer($referral->getReferrer());
         $reg->setReferral($referral);
+        $referral->setRegistration($reg);
         $referral->getReferrer()->incSignupCount();
         $this->em->persist($reg);
         $this->em->flush();
