@@ -32,4 +32,13 @@ class GetReferralRegistrationEvent extends Event
         return $this->referral;
     }
 
+    /**
+     * 
+     * @return User
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
 }
