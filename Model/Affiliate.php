@@ -86,7 +86,7 @@ class Affiliate
     {
         if ($this->hasReferral()) {
             $referral = $this->getReferral();
-            if ($referral->getRegistration() == null) {
+            if ($referral !== null && $referral->getRegistration() == null) {
                 $this->saveRegistrationLog($user, $referral);
                 $this->getDispatcher()->dispatch(
                         ShayganAffiliateEvents::REGISTER_COMPLETED
