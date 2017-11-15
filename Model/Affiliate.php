@@ -128,8 +128,8 @@ class Affiliate
     private function getReferrerUrl()
     {
 
-        if (isset($_SERVER['HTTP_REFERER'])) {
-            $url = $_SERVER['HTTP_REFERER'];
+        if (filter_input(INPUT_SERVER, "HTTP_REFERER") !== null) {
+            $url = filter_input(INPUT_SERVER, "HTTP_REFERER");
             $referrerUrl = $this->em->getRepository(ReferrerUrl::class)->findOneByUrl($url);
             if ($referrerUrl) {
                 $q = $this->em->createQuery('UPDATE ShayganAffiliateBundle:ReferrerUrl r SET r.referCount=r.referCount+1 WHERE r.id = :id');
@@ -151,10 +151,7 @@ class Affiliate
 
     private function getReferralIp()
     {
-        if (isset($_SERVER['REMOTE_ADDR'])) {
-            return $_SERVER['REMOTE_ADDR'];
-        }
-        return null;
+        return filter_input(INPUT_SERVER,'REMOTE_ADDR');
     }
 
     private function setSession($referralId)
@@ -162,7 +159,7 @@ class Affiliate
         $this->session->set($this->config['session_referral_id_param_name'], $referralId);
     }
 
-    private function setCookie($response, $referralId)
+    private function setCookie(Response $response, $referralId)
     {
         $response->headers
             ->setCookie(new Cookie($this->config['cookie_referral_id_param_name']
