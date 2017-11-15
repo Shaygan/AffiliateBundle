@@ -24,11 +24,10 @@ class Affiliate
     private $em;
     private $session;
     private $request;
-    private $cookies;
     private $dispatcher;
     private $config;
 
-    function __construct(EntityManager $em, Container $container)
+    public function __construct(EntityManager $em, Container $container)
     {
 
         if ($container->has("request_stack")) {
@@ -37,7 +36,6 @@ class Affiliate
             $this->request = $container->get("request");
         }
         $this->session = $container->get("session");
-        $this->cookies = $this->request->cookies;
         $this->dispatcher = $container->get("event_dispatcher");
         $this->em = $em;
 
@@ -50,7 +48,7 @@ class Affiliate
      *
      * @param Response $response
      */
-    function record($response)
+    public function record(Response $response)
     {
         $referrerId = (int)$this->getRefParam();
         if ($referrerId) {
@@ -113,10 +111,10 @@ class Affiliate
     }
 
     /**
-     * @param $referrer
+     * @param Referrer $referrer
      * @return Referral
      */
-    private function createReferral($referrer)
+    private function createReferral(Referrer $referrer)
     {
         $referral = new Referral();
         $referral->setReferrer($referrer);
@@ -208,7 +206,7 @@ class Affiliate
     {
         if ($this->hasReferral()) {
             $referral = $this->getReferral();
-            if ($referral !== null && $referral->getRegistration() == null) {
+            if ($referral !== null && $referral->getRegistration() === null) {
                 $this->saveRegistrationLog($user, $referral);
                 $this->getDispatcher()->dispatch(
                     ShayganAffiliateEvents::REGISTER_COMPLETED

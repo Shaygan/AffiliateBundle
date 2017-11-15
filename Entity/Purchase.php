@@ -40,14 +40,14 @@ class Purchase
     private $createAt;
 
     /**
-     * @var integer
+     * @var Referrer
      *
      * @ORM\ManyToOne(targetEntity="Referrer", inversedBy="commissions")
      */
     private $referrer;
 
     /**
-     * @var integer
+     * @var ReferralRegistration
      *
      * @ORM\ManyToOne(targetEntity="ReferralRegistration", inversedBy="commissions")
      */
@@ -132,22 +132,8 @@ class Purchase
         $this->setCreateAt(new \DateTime);
     }
 
-//    /**
-//     * Set id
-//     *
-//     * @param integer $id
-//     *
-//     * @return Commission
-//     */
-//    public function setId($id)
-//    {
-//        $this->id = $id;
-//
-//        return $this;
-//    }
-/////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////
+
+/* */
 
 
     /**
