@@ -4,11 +4,13 @@ namespace Shaygan\AffiliateBundle\Model;
 
 use Doctrine\ORM\EntityManager;
 use FOS\UserBundle\Model\User;
+use Shaygan\AffiliateBundle\Entity\Purchase;
 use Shaygan\AffiliateBundle\Entity\Referral;
-use Shaygan\AffiliateBundle\Entity\Referrer;
 use Shaygan\AffiliateBundle\Entity\ReferralRegistration;
-use Shaygan\AffiliateBundle\Event\GetReferralRegistrationEvent;
+use Shaygan\AffiliateBundle\Entity\Referrer;
+use Shaygan\AffiliateBundle\Entity\ReferrerUrl;
 use Shaygan\AffiliateBundle\Event\GetPurchaseEvent;
+use Shaygan\AffiliateBundle\Event\GetReferralRegistrationEvent;
 use Shaygan\AffiliateBundle\ShayganAffiliateEvents;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -43,10 +45,10 @@ class Affiliate
     }
 
     /**
-     * Record referral if detect referrer parameter in query for traking user 
-     * ReferralRegistration, purchasee and purchase
-     * 
-     * @param type $response
+     * Record referral if detect referrer parameter in query string for tracking users
+     * ReferralRegistration and purchase
+     *
+     * @param Response $response
      */
     function record($response)
     {
@@ -76,11 +78,11 @@ class Affiliate
     }
 
     /**
-     * Check referral logs if found referral record the user as referred for 
+     * Check referral logs if found referral record the user as referred for
      * next events
-     * 
+     *
      * @param Response $response
-     * @param User $userhas
+     * @param User $user
      */
     public function recordRegistration(Response $response, User $user)
     {
@@ -98,9 +100,9 @@ class Affiliate
     }
 
     /**
-     * 
-     * @return \Shaygan\AffiliateBundle\Entity\Purchase
-     * @return type
+     * @param  PurchaseInterface $order
+     * @param string $program
+     * @return Purchase | null
      */
     public function getPurchaseCommission(PurchaseInterface $order, $program = "default")
     {
@@ -120,13 +122,14 @@ class Affiliate
 
     public function getRegistrationCountByUser(User $user)
     {
-        return $this->em->getRepository('ShayganAffiliateBundle:ReferralRegistration')->getRegistrationCountByUser($user);
+        return $this->em->getRepository(ReferralRegistration::class)->getRegistrationCountByUser($user);
     }
 
     /**
-     * 
-     * @param \Shaygan\AffiliateBundle\Model\PurchaseInterface $order
-     * @return \Shaygan\AffiliateBundle\Entity\Purchase
+     *
+     * @param PurchaseInterface $order
+     * @param string $program
+     * @return Purchase
      */
     protected function createPurchaseEntity(PurchaseInterface $order, $program)
     {
@@ -135,20 +138,20 @@ class Affiliate
         $purchasePrice = $order->getPurchasePrice();
 
 
-        $parchase = new \Shaygan\AffiliateBundle\Entity\Purchase;
-        $parchase->setProgram($program);
-        $parchase->setType($type);
-        $parchase->setOrderId($order->getId());
-        $parchase->setReferralRegistration($referralRegistration);
-        $parchase->setReferrer($referralRegistration->getReferrer());
-        $parchase->setPurchaseAmount($purchasePrice);
-        $parchase->setCommissionAmount($this->getCommissionAmount($order, $program));
-        $parchase->setCommission($this->getCommissionValue($order, $program));
+        $purchase = new Purchase();
+        $purchase->setProgram($program);
+        $purchase->setType($type);
+        $purchase->setOrderId($order->getId());
+        $purchase->setReferralRegistration($referralRegistration);
+        $purchase->setReferrer($referralRegistration->getReferrer());
+        $purchase->setPurchaseAmount($purchasePrice);
+        $purchase->setCommissionAmount($this->getCommissionAmount($order, $program));
+        $purchase->setCommission($this->getCommissionValue($order, $program));
 
-        return $parchase;
+        return $purchase;
     }
 
-    private function getCommissionAmount($order, $program)
+    private function getCommissionAmount(PurchaseInterface $order, $program)
     {
         $type = $this->config['programs'][$program]['type'];
         $totalPrice = $order->getPurchasePrice();
@@ -159,7 +162,7 @@ class Affiliate
                 $commissionAmount = (int) ($totalPrice * ($this->config['programs'][$program]['commission_percent'] / 100));
             }
         } elseif ($type == "fixed-price") {
-            if ($this->isFirstPurchase()) {
+            if ($this->isFirstPurchase($order->getReferredUser(), $program)) {
                 $commissionAmount = $this->config['programs'][$program]['first_commission_amount'];
             } else {
                 $commissionAmount = $this->config['programs'][$program]['first_commission_amount'];
@@ -171,7 +174,7 @@ class Affiliate
         return $commissionAmount;
     }
 
-    private function getCommissionValue($order, $program)
+    private function getCommissionValue(PurchaseInterface $order, $program)
     {
         $type = $this->config['programs'][$program]['type'];
         if ($type == "percentage") {
@@ -181,7 +184,7 @@ class Affiliate
                 $commissionValue = $this->config['programs'][$program]['commission_percent'];
             }
         } elseif ($type == "fixed-price") {
-            if ($this->isFirstPurchase()) {
+            if ($this->isFirstPurchase($order->getReferredUser(), $program)) {
                 $commissionValue = $this->config['programs'][$program]['first_commission_amount'];
             } else {
                 $commissionValue = $this->config['programs'][$program]['first_commission_amount'];
@@ -193,16 +196,20 @@ class Affiliate
         return $commissionValue;
     }
 
-    public function getReferrerIfPurchaseCommissionEligible(User $user)
+    public function getReferrerIfPurchaseCommissionEligible(User $user, $program)
     {
-        $reg = $this->isPurchaseEligible($user);
-        if ($reg) {
-            return $reg->getReferrer();
+        if ($this->isPurchaseEligible($user, $program)) {
+            return $this->getUserReferralRegistration($user);
         } else {
             return false;
         }
     }
 
+    /**
+     * @param User $user
+     * @param string $program
+     * @return bool
+     */
     protected function isPurchaseEligible(User $user, $program)
     {
         $reg = $this->getUserReferralRegistration($user);
@@ -230,14 +237,39 @@ class Affiliate
     }
 
     /**
-     * 
+     *
      * @param User $user
      * @return ReferralRegistration
      */
     protected function getUserReferralRegistration(User $user)
     {
-        return $this->em->getRepository("ShayganAffiliateBundle:ReferralRegistration")
+        return $this->em->getRepository(ReferralRegistration::class)
                         ->findOneBy(array("userId" => $user->getId()));
+    }
+
+    /**
+     * @param $referrer
+     * @return Referral
+     */
+    private function createReferral($referrer)
+    {
+        $referral = new Referral();
+        $referral->setReferrer($referrer);
+        $referral->setReferrerUrl($this->getReferrerUrl());
+        $referral->setIp($this->getReferralIp());
+        $this->em->persist($referral);
+        $this->em->flush();
+        return $referral;
+    }
+
+    /**
+     * @param $referrerId
+     * @return Referrer
+     */
+    private function getReferrer($referrerId)
+    {
+        $referrer = $this->em->getRepository(Referrer::class)->find($referrerId);
+        return $referrer;
     }
 
     private function getReferrerUrl()
@@ -245,7 +277,7 @@ class Affiliate
 
         if (isset($_SERVER['HTTP_REFERER'])) {
             $url = $_SERVER['HTTP_REFERER'];
-            $referrerUrl = $this->em->getRepository("ShayganAffiliateBundle:ReferrerUrl")->findOneByUrl($url);
+            $referrerUrl = $this->em->getRepository(ReferrerUrl::class)->findOneByUrl($url);
             if ($referrerUrl) {
                 $q = $this->em->createQuery('UPDATE ShayganAffiliateBundle:ReferrerUrl r SET r.referCount=r.referCount+1 WHERE r.id = :id');
                 $q->setParameters(array(
@@ -254,7 +286,7 @@ class Affiliate
                 $q->execute();
                 return $referrerUrl;
             } else {
-                $referrerUrl = new \Shaygan\AffiliateBundle\Entity\ReferrerUrl();
+                $referrerUrl = new ReferrerUrl();
                 $referrerUrl->setUrl($url);
                 $referrerUrl->setReferCount(1);
                 $this->em->persist($referrerUrl);
@@ -280,13 +312,8 @@ class Affiliate
         ));
         $rowCount = $q->execute();
         if ($rowCount == 1) {
-            $referrer = $this->em->getRepository("ShayganAffiliateBundle:Referrer")->find($referrerId);
-            $referral = new Referral();
-            $referral->setReferrer($referrer);
-            $referral->setReferrerUrl($this->getReferrerUrl());
-            $referral->setIp($this->getReferralIp());
-            $this->em->persist($referral);
-            $this->em->flush();
+            $referrer = $this->getReferrer($referrerId);
+            $referral = $this->createReferral($referrer);
             $this->setSession($referral->getId());
             $this->setCookie($response, $referral->getId());
         } else {
@@ -320,13 +347,13 @@ class Affiliate
     }
 
     /**
-     * 
+     *
      * @return Referral
      */
     protected function getReferral()
     {
         $referralId = $this->session->get($this->config['session_referral_id_param_name']);
-        $referral = $this->em->getRepository("ShayganAffiliateBundle:Referral")->find($referralId);
+        $referral = $this->em->getRepository(Referral::class)->find($referralId);
         return $referral;
     }
 
@@ -362,10 +389,25 @@ class Affiliate
                 return filter_input(INPUT_GET, $key, FILTER_VALIDATE_INT);
             }
         }
+
+        return 0;
+    }
+
+    public function saveRegistration(User $user, User $referrerUser)
+    {
+        $referrer = $this->getReferrer($referrerUser->getId());
+
+        $reg = new ReferralRegistration();
+        $reg->setUserId($user->getId());
+        $reg->setReferrer($referrer);
+        $referrer->incSignupCount();
+        $this->em->persist($reg);
+        $this->em->flush();
+        return $reg;
     }
 
     /**
-     * 
+     *
      * @return Request
      */
     protected function getRequest()
@@ -374,7 +416,7 @@ class Affiliate
     }
 
     /**
-     * 
+     *
      * @return EventDispatcher
      */
     protected function getDispatcher()
