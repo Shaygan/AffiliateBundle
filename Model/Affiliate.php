@@ -415,6 +415,10 @@ class Affiliate
     {
         $referrer = $this->getReferrer($referrerUser->getId());
 
+        if (null === $referrer) {
+            $referrer = $this->createReferrer($referrerUser->getId());
+        }
+
         $reg = new ReferralRegistration();
         $reg->setUserId($user->getId());
         $reg->setReferrer($referrer);
