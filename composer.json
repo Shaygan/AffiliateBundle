@@ -29,6 +29,11 @@
         "friendsofsymfony/user-bundle": ">=1.3",
         "knplabs/knp-paginator-bundle": "~2.4"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^6.4",
+        "symfony/phpunit-bridge": "^3.0"
+
+    },
     "autoload": {
         "psr-0": {
             "Shaygan\\AffiliateBundle": ""
