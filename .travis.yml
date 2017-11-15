@@ -10,17 +10,11 @@ env:
 
 matrix:
   fast_finish: true
-  include:
-    - php: 7.0
-      env: TARGET=cs_dry_run
 
 sudo: false
 
 cache:
   directories:
     - $HOME/.composer/cache
-
-before_install:
-  - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
 
 install: composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
