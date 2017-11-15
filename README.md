@@ -1,7 +1,5 @@
 ShayganAffiliateBundle
 ===================
-**Notice: this bundle is under heavy development do not use it in production**
-
 A simple **Symfony Affiliate Bundle**.
 
 This FOSUserBundle compatible Bundle tracks referrals with query string 
