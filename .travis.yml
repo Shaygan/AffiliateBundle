@@ -38,4 +38,4 @@ before_install:
 install: composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
 
 script:
-- make $TARGET
+ - make $TARGET
