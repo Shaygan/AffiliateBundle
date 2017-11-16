@@ -1,27 +1,20 @@
 services:
     Shaygan\AffiliateBundle\Model\Affiliate:
         class: Shaygan\AffiliateBundle\Model\Affiliate
-        arguments: ["@doctrine.orm.entity_manager"]
-        calls:
-            - method: setContainer
-              arguments:
-                  - '@service_container'
-    shaygan_affiliate: '@Shaygan\AffiliateBundle\Model\Affiliate'
+        arguments: ["@doctrine.orm.entity_manager", "@request_stack", "@session", "@event_dispatcher", "%shaygan_affiliate.config%"]
 
-    shaygan_affiliate.kernel_response_listener:
+    Shaygan\AffiliateBundle\EventListener\KernelEventListener:
         class: Shaygan\AffiliateBundle\EventListener\KernelEventListener
         arguments: ["@shaygan_affiliate"]
         tags:
             - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 0 }
-#    shaygan_affiliate.kernel_request_listener:
-#        class: Shaygan\AffiliateBundle\EventListener\KernelEventListener
-#        arguments: ["@shaygan_affiliate.affiliate"]
-#        tags:
-#            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
-#
 
-    shaygan_affiliate.registration:
+    Shaygan\AffiliateBundle\EventListener\RegistrationListener:
         class: Shaygan\AffiliateBundle\EventListener\RegistrationListener
         arguments: ["@shaygan_affiliate"]
         tags:
             - { name: kernel.event_subscriber }
+
+    shaygan_affiliate: '@Shaygan\AffiliateBundle\Model\Affiliate'
+    shaygan_affiliate.kernel_response_listener: '@Shaygan\AffiliateBundle\EventListener\KernelEventListener'
+    shaygan_affiliate.registration: '@Shaygan\AffiliateBundle\EventListener\RegistrationListener'

@@ -3,6 +3,7 @@
 namespace Shaygan\AffiliateBundle\Model;
 
 use Doctrine\ORM\EntityManager;
+use Exception;
 use FOS\UserBundle\Model\User;
 use Shaygan\AffiliateBundle\Entity\Purchase;
 use Shaygan\AffiliateBundle\Entity\Referral;
@@ -12,14 +13,14 @@ use Shaygan\AffiliateBundle\Entity\ReferrerUrl;
 use Shaygan\AffiliateBundle\Event\GetPurchaseEvent;
 use Shaygan\AffiliateBundle\Event\GetReferralRegistrationEvent;
 use Shaygan\AffiliateBundle\ShayganAffiliateEvents;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\DependencyInjection\ContainerAwareInterface;
-use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 
-class Affiliate implements ContainerAwareInterface
+class Affiliate
 {
 
     private $em;
@@ -28,23 +29,14 @@ class Affiliate implements ContainerAwareInterface
     private $dispatcher;
     private $config;
 
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em, RequestStack $requestStack, Session $session, EventDispatcherInterface $eventDispatcher, $config)
     {
         $this->em = $em;
-    }
-
-    public function setContainer(ContainerInterface $container = null)
-    {
-        if ($container->has("request_stack")) {
-            $this->request = $container->get("request_stack")->getCurrentRequest();
-        } else {
-            $this->request = $container->get("request");
-        }
-        $this->session = $container->get("session");
+        $this->request = $requestStack->getCurrentRequest();
+        $this->session = $session;
         $this->cookies = $this->request->cookies;
-        $this->dispatcher = $container->get("event_dispatcher");
-
-        $this->config = $container->getParameter('shaygan_affiliate.config');
+        $this->dispatcher = $eventDispatcher;
+        $this->config = $config;
     }
 
     /**
@@ -55,7 +47,7 @@ class Affiliate implements ContainerAwareInterface
      */
     public function record(Response $response)
     {
-        $referrerId = (int)$this->getRefParam();
+        $referrerId = (int) $this->getRefParam();
         if ($referrerId) {
             if (!$this->session->has($this->config['session_referral_id_param_name'])) {
                 $this->logReferral($referrerId, $response);
@@ -156,7 +148,7 @@ class Affiliate implements ContainerAwareInterface
 
     private function getReferralIp()
     {
-        return filter_input(INPUT_SERVER,'REMOTE_ADDR');
+        return filter_input(INPUT_SERVER, 'REMOTE_ADDR');
     }
 
     private function setSession($referralId)
@@ -347,9 +339,9 @@ class Affiliate implements ContainerAwareInterface
         $totalPrice = $order->getPurchasePrice();
         if ($type == "percentage") {
             if ($this->isFirstPurchase($order->getReferredUser(), $program)) {
-                $commissionAmount = (int)($totalPrice * ($this->config['programs'][$program]['first_commission_percent'] / 100));
+                $commissionAmount = (int) ($totalPrice * ($this->config['programs'][$program]['first_commission_percent'] / 100));
             } else {
-                $commissionAmount = (int)($totalPrice * ($this->config['programs'][$program]['commission_percent'] / 100));
+                $commissionAmount = (int) ($totalPrice * ($this->config['programs'][$program]['commission_percent'] / 100));
             }
         } elseif ($type == "fixed-price") {
             if ($this->isFirstPurchase($order->getReferredUser(), $program)) {
@@ -358,7 +350,7 @@ class Affiliate implements ContainerAwareInterface
                 $commissionAmount = $this->config['programs'][$program]['first_commission_amount'];
             }
         } else {
-            throw new \Exception("Invalid commission type.");
+            throw new Exception("Invalid commission type.");
         }
 
         return $commissionAmount;
@@ -391,7 +383,7 @@ class Affiliate implements ContainerAwareInterface
                 $commissionValue = $this->config['programs'][$program]['first_commission_amount'];
             }
         } else {
-            throw new \Exception("Invalid commission type.");
+            throw new Exception("Invalid commission type.");
         }
 
         return $commissionValue;
