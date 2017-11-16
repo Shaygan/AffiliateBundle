@@ -82,9 +82,9 @@ class Affiliate
     private function logReferral($referrerId, Response $response)
     {
         $q = $this->em->createQuery('UPDATE ShayganAffiliateBundle:Referrer r SET r.referCount=r.referCount+1 WHERE r.id = :referrerId');
-        $q->setParameters(array(
+        $q->setParameters([
             'referrerId' => $referrerId,
-        ));
+        ]);
         $rowCount = $q->execute();
         if ($rowCount == 1) {
             $referrer = $this->getReferrer($referrerId);
@@ -130,9 +130,9 @@ class Affiliate
             $referrerUrl = $this->em->getRepository(ReferrerUrl::class)->findOneByUrl($url);
             if ($referrerUrl) {
                 $q = $this->em->createQuery('UPDATE ShayganAffiliateBundle:ReferrerUrl r SET r.referCount=r.referCount+1 WHERE r.id = :id');
-                $q->setParameters(array(
+                $q->setParameters([
                     'id' => $referrerUrl->getId(),
-                ));
+                ]);
                 $q->execute();
                 return $referrerUrl;
             } else {
@@ -203,8 +203,8 @@ class Affiliate
             if ($referral !== null && $referral->getRegistration() === null) {
                 $this->saveRegistrationLog($user, $referral);
                 $this->getDispatcher()->dispatch(
-                    ShayganAffiliateEvents::REGISTER_COMPLETED
-                    , new GetReferralRegistrationEvent($referral, $user)
+                    ShayganAffiliateEvents::REGISTER_COMPLETED,
+                    new GetReferralRegistrationEvent($referral, $user)
                 );
             }
             $this->clearReferral($response);
@@ -224,6 +224,7 @@ class Affiliate
     {
         $referralId = $this->session->get($this->config['session_referral_id_param_name']);
         $referral = $this->em->getRepository(Referral::class)->find($referralId);
+
         return $referral;
     }
 
@@ -237,6 +238,7 @@ class Affiliate
         $referral->getReferrer()->incSignupCount();
         $this->em->persist($reg);
         $this->em->flush();
+
         return $reg;
     }
 
@@ -268,8 +270,10 @@ class Affiliate
             $this->em->flush();
             $this->getDispatcher()->dispatch(
                 ShayganAffiliateEvents::PURCHASE_COMPLETED
-                , new GetPurchaseEvent($commission)
+                ,
+                new GetPurchaseEvent($commission)
             );
+
             return $commission;
         } else {
             return null;
@@ -304,7 +308,7 @@ class Affiliate
     private function getUserReferralRegistration(User $user)
     {
         return $this->em->getRepository(ReferralRegistration::class)
-            ->findOneBy(array("userId" => $user->getId()));
+            ->findOneBy(["userId" => $user->getId()]);
     }
 
     /**
@@ -417,6 +421,7 @@ class Affiliate
         $referrer->incSignupCount();
         $this->em->persist($reg);
         $this->em->flush();
+
         return $reg;
     }
 
