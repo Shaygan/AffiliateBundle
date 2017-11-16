@@ -28,7 +28,7 @@ class Affiliate implements ContainerAwareInterface
     private $dispatcher;
     private $config;
 
-    function __construct(EntityManager $em)
+    public function __construct(EntityManager $em)
     {
         $this->em = $em;
     }
