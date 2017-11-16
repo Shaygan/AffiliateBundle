@@ -12,13 +12,14 @@ use Shaygan\AffiliateBundle\Entity\ReferrerUrl;
 use Shaygan\AffiliateBundle\Event\GetPurchaseEvent;
 use Shaygan\AffiliateBundle\Event\GetReferralRegistrationEvent;
 use Shaygan\AffiliateBundle\ShayganAffiliateEvents;
-use Symfony\Component\DependencyInjection\Container;
+use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class Affiliate
+class Affiliate implements ContainerAwareInterface
 {
 
     private $em;
@@ -27,17 +28,21 @@ class Affiliate
     private $dispatcher;
     private $config;
 
-    public function __construct(EntityManager $em, Container $container)
+    function __construct(EntityManager $em)
     {
+        $this->em = $em;
+    }
 
+    public function setContainer(ContainerInterface $container = null)
+    {
         if ($container->has("request_stack")) {
             $this->request = $container->get("request_stack")->getCurrentRequest();
         } else {
             $this->request = $container->get("request");
         }
         $this->session = $container->get("session");
+        $this->cookies = $this->request->cookies;
         $this->dispatcher = $container->get("event_dispatcher");
-        $this->em = $em;
 
         $this->config = $container->getParameter('shaygan_affiliate.config');
     }
