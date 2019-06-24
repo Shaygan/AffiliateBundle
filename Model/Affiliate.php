@@ -25,7 +25,6 @@ class Affiliate {
     private $em;
     private $session;
     private $request;
-    private $cookies;
     private $dispatcher;
     private $config;
 
@@ -33,7 +32,6 @@ class Affiliate {
         $this->em = $em;
         $this->request = $requestStack->getCurrentRequest();
         $this->session = $session;
-        $this->cookies = $this->request->cookies;
         $this->dispatcher = $eventDispatcher;
         $this->config = $config;
     }
