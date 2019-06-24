@@ -25,6 +25,7 @@ class Affiliate {
     private $em;
     private $session;
     private $request;
+    private $cookies;
     private $dispatcher;
     private $config;
 
