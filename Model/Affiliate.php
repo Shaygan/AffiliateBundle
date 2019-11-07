@@ -180,6 +180,8 @@ class Affiliate {
 
         $this->em->persist($referrer);
         $this->em->flush();
+        
+        return $referrer;
     }
 
     /**
@@ -400,7 +402,7 @@ class Affiliate {
         }
 
         $referral = new Referral();
-        $referral->setReferrer($referrerUser);
+        $referral->setReferrer($referrer);
 
         $reg = new ReferralRegistration();
         $reg->setUserId($user->getId())
