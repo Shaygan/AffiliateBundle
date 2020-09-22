@@ -23,10 +23,10 @@ class RegistrationListener implements EventSubscriberInterface
     {
         if ( class_exists ( '\FOS\UserBundle\FOSUserEvents' )) {
             return array(\FOS\UserBundle\FOSUserEvents::REGISTRATION_COMPLETED => "onRegistrationComleted");
-        } else if (class_exists ( '\App\AppEvents' )) {
-            return array(\App\AppEvents::REGISTRATION_COMPLETED => "onRegistrationComleted");
+        } else if (class_exists ( '\App\AppEvents' )  && defined('\App\AppEvents::USER_REGISTRATION_COMPLETED')) {
+            return array(\App\AppEvents::USER_REGISTRATION_COMPLETED => "onRegistrationComleted");
         } else {
-            throw new \Exception('No User Registration Even found');
+            throw new \Exception('No User Registration Event found');
         }
     }
 
