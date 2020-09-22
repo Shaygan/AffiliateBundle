@@ -3,7 +3,6 @@
 namespace Shaygan\AffiliateBundle\EventListener;
 
 use FOS\UserBundle\Event\FilterUserResponseEvent;
-use FOS\UserBundle\FOSUserEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
@@ -22,10 +21,10 @@ class RegistrationListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        if ( class_exists ( 'FOSUserEvents' )) {
-            return array(FOSUserEvents::REGISTRATION_COMPLETED => "onRegistrationComleted");
-        } else if (class_exists ( 'AppEvents' )) {
-            return array(AppEvents::REGISTRATION_COMPLETED => "onRegistrationComleted");
+        if ( class_exists ( '\FOS\UserBundle\FOSUserEvents' )) {
+            return array(\FOS\UserBundle\FOSUserEvents::REGISTRATION_COMPLETED => "onRegistrationComleted");
+        } else if (class_exists ( '\App\AppEvents' )) {
+            return array(\App\AppEvents::REGISTRATION_COMPLETED => "onRegistrationComleted");
         } else {
             throw new \Exception('No User Registration Even found');
         }
