@@ -27,7 +27,6 @@
         "twig/twig": "*",
         "symfony/templating": "*",
         "doctrine/orm": "^2.5",
-        "friendsofsymfony/user-bundle": "*",
         "knplabs/knp-paginator-bundle": "~2.4"
     },
     "require-dev": {
