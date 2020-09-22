@@ -22,9 +22,9 @@ class RegistrationListener implements EventSubscriberInterface
 
     public static function getSubscribedEvents()
     {
-        if ( class_exists ( FOSUserEvents )) {
+        if ( class_exists ( 'FOSUserEvents' )) {
             return array(FOSUserEvents::REGISTRATION_COMPLETED => "onRegistrationComleted");
-        } else (class_exists ( FOSUserEvents )) {
+        } else if (class_exists ( 'AppEvents' )) {
             return array(AppEvents::REGISTRATION_COMPLETED => "onRegistrationComleted");
         } else {
             throw new \Exception('No User Registration Even found');
