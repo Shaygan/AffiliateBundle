@@ -30,7 +30,7 @@ class RegistrationListener implements EventSubscriberInterface
         }
     }
 
-    public function onRegistrationComleted(FilterUserResponseEvent $event)
+    public function onRegistrationComleted($event)
     {
         $this->affiliate->recordRegistration($event->getResponse(), $event->getUser());
     }
