@@ -21,13 +21,13 @@
         }
     ],
     "require": {
-        "php": "^5.5.9 || ^7.0",
+        "php": "^7.0",
         "symfony/framework-bundle": ">=2.2",
         "symfony/twig-bundle": "*",
         "twig/twig": "*",
         "symfony/templating": "*",
         "doctrine/orm": "^2.5",
-        "knplabs/knp-paginator-bundle": "~2.4"
+        "knplabs/knp-paginator-bundle": "*"
     },
     "require-dev": {
         "symfony/phpunit-bridge": "^4.1.12",
