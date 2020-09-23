@@ -199,7 +199,7 @@ class Affiliate {
      * @param Response $response
      * @param User $user
      */
-    public function recordRegistration(Response $response, User $user) {
+    public function recordRegistration(Response $response, $user) {
         if ($this->hasReferral()) {
             $referral = $this->getReferral();
             if ($referral !== null && $referral->getRegistration() === null) {
@@ -228,7 +228,7 @@ class Affiliate {
         return $referral;
     }
 
-    private function saveRegistrationLog(User $user, Referral $referral) {
+    private function saveRegistrationLog($user, Referral $referral) {
         $reg = new ReferralRegistration();
         $reg->setUserId($user->getId());
         $reg->setReferrer($referral->getReferrer());
