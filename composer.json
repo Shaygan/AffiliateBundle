@@ -30,7 +30,7 @@
         "knplabs/knp-paginator-bundle": "~2.4"
     },
     "require-dev": {
-        "symfony/phpunit-bridge": "^3.4.26 || ^4.1.12",
+        "symfony/phpunit-bridge": "^4.1.12",
         "friendsofphp/php-cs-fixer": "^1.11",
         "phpunit/phpunit": "~4.8|~5.0"
 
