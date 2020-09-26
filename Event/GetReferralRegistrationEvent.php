@@ -2,7 +2,7 @@
 
 namespace Shaygan\AffiliateBundle\Event;
 
-use FOS\UserBundle\Model\User;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Shaygan\AffiliateBundle\Entity\Referral;
 use Symfony\Component\EventDispatcher\Event;
 
