@@ -4,7 +4,7 @@ namespace Shaygan\AffiliateBundle\Model;
 
 use Doctrine\ORM\EntityManager;
 use Exception;
-use FOS\UserBundle\Model\User;
+use Symfony\Component\Security\Core\User\UserInterface as User;
 use Shaygan\AffiliateBundle\Entity\Purchase;
 use Shaygan\AffiliateBundle\Entity\Referral;
 use Shaygan\AffiliateBundle\Entity\ReferralRegistration;
