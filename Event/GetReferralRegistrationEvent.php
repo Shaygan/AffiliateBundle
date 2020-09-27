@@ -17,7 +17,7 @@ class GetReferralRegistrationEvent extends Event
     private $referral;
     private $user;
 
-    public function __construct(Referral $referral, User $user)
+    public function __construct(Referral $referral,UserInterface $user)
     {
         $this->referral = $referral;
         $this->user = $user;
