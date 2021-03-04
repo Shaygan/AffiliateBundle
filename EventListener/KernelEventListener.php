@@ -3,7 +3,8 @@
 namespace Shaygan\AffiliateBundle\EventListener;
 
 use Shaygan\AffiliateBundle\Model\Affiliate;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
+
 
 /**
  *
@@ -20,7 +21,7 @@ class KernelEventListener
     }
 
 
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
         $this->affiliate->record($event->getResponse());
     }
