@@ -5,13 +5,13 @@ namespace Shaygan\AffiliateBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @Route("/affiliate")
  */
-class UserController extends Controller {
+class UserController extends AbstractController {
 
     /**
      * @Route("/", name="shaygan_affiliate_user_index")
