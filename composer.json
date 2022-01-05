@@ -22,7 +22,7 @@
     ],
     "require": {
         "php": "^7.0|^8.0",
-        "symfony/framework-bundle": ">=2.2",
+        "symfony/framework-bundle": ">=4.4",
         "symfony/twig-bundle": "*",
         "twig/twig": "*",
         "symfony/templating": "*",
