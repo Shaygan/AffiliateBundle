@@ -4,7 +4,7 @@ namespace Shaygan\AffiliateBundle\Event;
 
 use Symfony\Component\Security\Core\User\UserInterface;
 use Shaygan\AffiliateBundle\Entity\Referral;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  *  This event contain registered user and referral entities

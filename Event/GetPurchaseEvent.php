@@ -3,7 +3,7 @@
 namespace Shaygan\AffiliateBundle\Event;
 
 use Shaygan\AffiliateBundle\Model\PurchaseInterface;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  *
