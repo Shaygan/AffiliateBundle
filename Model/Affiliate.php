@@ -205,8 +205,8 @@ class Affiliate {
             if ($referral !== null && $referral->getRegistration() === null) {
                 $this->saveRegistrationLog($user, $referral);
                 $this->getDispatcher()->dispatch(
-                        ShayganAffiliateEvents::REGISTER_COMPLETED
-                        , new GetReferralRegistrationEvent($referral, $user)
+                         new GetReferralRegistrationEvent($referral, $user),
+                    ShayganAffiliateEvents::REGISTER_COMPLETED
                 );
             }
             $this->clearReferral($response);
@@ -265,8 +265,8 @@ class Affiliate {
             $this->em->persist($commission);
             $this->em->flush();
             $this->getDispatcher()->dispatch(
-                    ShayganAffiliateEvents::PURCHASE_COMPLETED
-                    , new GetPurchaseEvent($commission)
+                new GetPurchaseEvent($commission,
+                ShayganAffiliateEvents::PURCHASE_COMPLETED)
             );
 
             return $commission;
