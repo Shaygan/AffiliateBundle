@@ -2,7 +2,7 @@ ShayganAffiliateBundle
 ===================
 A simple **Symfony Affiliate Bundle**.
 
-This FOSUserBundle compatible Bundle tracks referrals with query string 
+This ~~FOSUserBundle compatible~~ Bundle tracks referrals with query string 
 parameter and detect referred registrations via cookie. You can easil ask
 the bundle for commission amount (if there is any referrer) and apply the amount
 to referrer's user account. 
