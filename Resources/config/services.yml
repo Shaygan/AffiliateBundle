@@ -18,3 +18,16 @@ services:
     shaygan_affiliate: '@Shaygan\AffiliateBundle\Model\Affiliate'
     shaygan_affiliate.kernel_response_listener: '@Shaygan\AffiliateBundle\EventListener\KernelEventListener'
     shaygan_affiliate.registration: '@Shaygan\AffiliateBundle\EventListener\RegistrationListener'
+
+    Shaygan\AffiliateBundle\Entity\ReferralRegistrationRepository:
+        class: Shaygan\AffiliateBundle\Entity\ReferralRegistrationRepository
+        factory:
+            - '@doctrine.orm.entity_manager'
+            - getRepository
+        arguments:
+            - Shaygan\AffiliateBundle\Entity\ReferralRegistration
+
+    Shaygan\AffiliateBundle\Controller\UserController:
+        class: Shaygan\AffiliateBundle\Controller\UserController
+        arguments:
+            - '@Shaygan\AffiliateBundle\Entity\ReferralRegistrationRepository'

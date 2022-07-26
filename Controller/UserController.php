@@ -5,6 +5,7 @@ namespace Shaygan\AffiliateBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Shaygan\AffiliateBundle\Entity\ReferralRegistrationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -13,13 +14,19 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class UserController extends AbstractController
 {
+    private $referralRegistrationRepository;
+    public function __construct(ReferralRegistrationRepository $referralRegistrationRepository)
+    {
+        $this->referralRegistrationRepository = $referralRegistrationRepository;
+    }
+
     /**
      * @Route("/", name="shaygan_affiliate_user_index")
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, ReferralRegistrationRepository $referralRegistrationRepository)
     {
         if ($this->getUser()) {
-            $query = $this->getEm()->getRepository('ShayganAffiliateBundle:ReferralRegistration')->getRegistrationByUser($this->getUser());
+            $query = $this->referralRegistrationRepository->getRegistrationByUser($this->getUser());
             $paginator = $this->get('knp_paginator');
             $pagination = $paginator->paginate(
                 $query, $request->query->getInt('page', 1)/* page number */, 10/* limit per page */
@@ -37,7 +44,7 @@ class UserController extends AbstractController
      */
     public function reportAction(Request $request)
     {
-        $query = $this->getEm()->getRepository('ShayganAffiliateBundle:ReferralRegistration')->getRegistrationByUser($this->getUser());
+        $query = $this->referralRegistrationRepository->getRegistrationByUser($this->getUser());
         $paginator = $this->get('knp_paginator');
         $pagination = $paginator->paginate(
             $query, $request->query->getInt('page', 1)/* page number */, 10/* limit per page */
