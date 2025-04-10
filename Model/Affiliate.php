@@ -28,10 +28,9 @@ class Affiliate {
     private $dispatcher;
     private $config;
 
-    public function __construct(EntityManager $em, RequestStack $requestStack, Session $session, EventDispatcherInterface $eventDispatcher, $config) {
+    public function __construct(EntityManager $em, RequestStack $requestStack, EventDispatcherInterface $eventDispatcher, $config) {
         $this->em = $em;
         $this->request = $requestStack->getCurrentRequest();
-        $this->session = $session;
         $this->dispatcher = $eventDispatcher;
         $this->config = $config;
     }
@@ -43,17 +42,18 @@ class Affiliate {
      * @param Response $response
      */
     public function record(Response $response) {
+        $this->session = $this->request->getSession();
         $referrerId = (int) $this->getRefParam();
         if ($referrerId) {
-            if (!$this->session->has($this->config['session_referral_id_param_name'])) {
+            if (!$this->getSession()->has($this->config['session_referral_id_param_name'])) {
                 $this->logReferral($referrerId, $response);
             } else {
-                $this->setCookie($response, $this->session->get($this->config['session_referral_id_param_name']));
+                $this->setCookie($response, $this->getSession()->get($this->config['session_referral_id_param_name']));
             }
         } else {
             if ($this->getRequest()->cookies->has($this->config['cookie_referral_id_param_name'])) {
                 $referralId = $this->getRequest()->cookies->get($this->config['cookie_referral_id_param_name']);
-                $this->session->set($this->config['session_referral_id_param_name'], $referralId);
+                $this->getSession()->set($this->config['session_referral_id_param_name'], $referralId);
             }
         }
     }
@@ -155,7 +155,7 @@ class Affiliate {
     }
 
     private function setSession($referralId) {
-        $this->session->set($this->config['session_referral_id_param_name'], $referralId);
+        $this->getSession()->set($this->config['session_referral_id_param_name'], $referralId);
     }
 
     private function setCookie(Response $response, $referralId) {
@@ -214,7 +214,7 @@ class Affiliate {
     }
 
     private function hasReferral() {
-        return $this->session->has($this->config['session_referral_id_param_name']);
+        return $this->getSession()->has($this->config['session_referral_id_param_name']);
     }
 
     /**
@@ -222,7 +222,7 @@ class Affiliate {
      * @return Referral
      */
     private function getReferral() {
-        $referralId = $this->session->get($this->config['session_referral_id_param_name']);
+        $referralId = $this->getSession()->get($this->config['session_referral_id_param_name']);
         $referral = $this->em->getRepository(Referral::class)->find($referralId);
 
         return $referral;
@@ -250,7 +250,7 @@ class Affiliate {
     }
 
     private function clearReferral(Response $response) {
-        $this->session->remove($this->config['session_referral_id_param_name']);
+        $this->getSession()->remove($this->config['session_referral_id_param_name']);
         $response->headers->clearCookie($this->config['cookie_referral_id_param_name']);
     }
 
@@ -421,6 +421,15 @@ class Affiliate {
         );
 
         return $reg;
+    }
+
+    private function getSession()
+    {
+        if ( null === $this->session ) {
+            $this->session = $this->request->getSession();
+        }
+
+        return $this->session;
     }
 
 }

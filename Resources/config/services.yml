@@ -1,7 +1,7 @@
 services:
     Shaygan\AffiliateBundle\Model\Affiliate:
         class: Shaygan\AffiliateBundle\Model\Affiliate
-        arguments: ["@doctrine.orm.entity_manager", "@request_stack", "@session", "@event_dispatcher", "%shaygan_affiliate.config%"]
+        arguments: ["@doctrine.orm.entity_manager", "@request_stack", "@event_dispatcher", "%shaygan_affiliate.config%"]
 
     Shaygan\AffiliateBundle\EventListener\KernelEventListener:
         class: Shaygan\AffiliateBundle\EventListener\KernelEventListener
