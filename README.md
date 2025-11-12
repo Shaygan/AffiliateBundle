@@ -1,14 +1,19 @@
 ShayganAffiliateBundle
 ===================
-A simple **Symfony Affiliate Bundle**.
+A simple **Symfony Affiliate Bundle** compatible with **Symfony 6.4+ and 7.x**.
 
-This ~~FOSUserBundle compatible~~ Bundle tracks referrals with query string 
-parameter and detect referred registrations via cookie. You can easil ask
+This ~~FOSUserBundle compatible~~ Bundle tracks referrals with query string
+parameter and detect referred registrations via cookie. You can easily ask
 the bundle for commission amount (if there is any referrer) and apply the amount
-to referrer's user account. 
+to referrer's user account.
 
 Your Order Object needs to implements \Shaygan\AffiliateBundle\Model\OrderInterface.
 
+## Requirements
+
+- PHP 8.1 or higher
+- Symfony 6.4 or 7.x
+- Doctrine ORM 2.10+ or 3.x
 
 ## Install
 
@@ -18,30 +23,27 @@ Via Composer
 $ composer require shaygan/affiliate-bundle
 ```
 
-Edit your app/AppKernel.php to register the bundle in the registerBundles() method as above:
+### Symfony 6.4+ / 7.x
 
+If you're using Symfony Flex, the bundle will be automatically registered. Otherwise, register it manually in `config/bundles.php`:
 
 ```php
-class AppKernel extends Kernel
-{
-
-    public function registerBundles()
-    {
-        $bundles = array(
-            // ...
-            // register the bundle here
-            new \Shaygan\AffiliateBundle\ShayganAffiliateBundle()
-        );
-    }
-}
+return [
+    // ...
+    Shaygan\AffiliateBundle\ShayganAffiliateBundle::class => ['all' => true],
+];
 ```
+
+### Older Symfony Versions
+
+For Symfony 4.4/5.x, please use an earlier version of this bundle.
 
 ## Configure the bundle
 
 This bundle was designed to just work out of the box. The only thing you have to configure in order to get this bundle up and running is your commission type amount and count.
 
 ```yaml
-# app/config/config.yml
+# config/packages/shaygan_affiliate.yaml
 
 shaygan_affiliate:
     programs:

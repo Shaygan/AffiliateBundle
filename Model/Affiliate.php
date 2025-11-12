@@ -2,7 +2,7 @@
 
 namespace Shaygan\AffiliateBundle\Model;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Security\Core\User\UserInterface as User;
 use Shaygan\AffiliateBundle\Entity\Purchase;
@@ -28,7 +28,7 @@ class Affiliate {
     private $dispatcher;
     private $config;
 
-    public function __construct(EntityManager $em, RequestStack $requestStack, EventDispatcherInterface $eventDispatcher, $config) {
+    public function __construct(EntityManagerInterface $em, RequestStack $requestStack, EventDispatcherInterface $eventDispatcher, $config) {
         $this->em = $em;
         $this->request = $requestStack->getCurrentRequest();
         $this->dispatcher = $eventDispatcher;
@@ -265,8 +265,8 @@ class Affiliate {
             $this->em->persist($commission);
             $this->em->flush();
             $this->getDispatcher()->dispatch(
-                new GetPurchaseEvent($commission,
-                ShayganAffiliateEvents::PURCHASE_COMPLETED)
+                new GetPurchaseEvent($commission),
+                ShayganAffiliateEvents::PURCHASE_COMPLETED
             );
 
             return $commission;
@@ -416,8 +416,8 @@ class Affiliate {
         $this->em->flush();
 
         $this->getDispatcher()->dispatch(
+                new GetReferralRegistrationEvent($referral, $user),
                 ShayganAffiliateEvents::REGISTER_COMPLETED
-                , new GetReferralRegistrationEvent($referral, $user)
         );
 
         return $reg;

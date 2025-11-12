@@ -31,3 +31,5 @@ services:
         class: Shaygan\AffiliateBundle\Controller\UserController
         arguments:
             - '@Shaygan\AffiliateBundle\Entity\ReferralRegistrationRepository'
+            - '@knp_paginator'
+        tags: ['controller.service_arguments']

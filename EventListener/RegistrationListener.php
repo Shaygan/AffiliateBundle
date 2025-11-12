@@ -19,12 +19,12 @@ class RegistrationListener implements EventSubscriberInterface
         $this->affiliate = $affiliate;
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         if ( class_exists ( '\FOS\UserBundle\FOSUserEvents' )) {
-            return array(\FOS\UserBundle\FOSUserEvents::REGISTRATION_COMPLETED => "onRegistrationComleted");
+            return [\FOS\UserBundle\FOSUserEvents::REGISTRATION_COMPLETED => "onRegistrationComleted"];
         } else if (class_exists ( '\App\AppEvents' )  && defined('\App\AppEvents::USER_REGISTRATION_COMPLETED')) {
-            return array(\App\AppEvents::USER_REGISTRATION_COMPLETED => "onRegistrationComleted");
+            return [\App\AppEvents::USER_REGISTRATION_COMPLETED => "onRegistrationComleted"];
         } else {
             throw new \Exception('No User Registration Event found');
         }
