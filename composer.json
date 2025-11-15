@@ -27,7 +27,7 @@
         "twig/twig": "^3.0",
         "doctrine/orm": "^2.10|^3.0",
         "doctrine/doctrine-bundle": "^2.7",
-        "knplabs/knp-paginator-bundle": "^6.0"
+        "knplabs/knp-paginator-bundle": "^5.0|^6.0"
     },
     "require-dev": {
         "symfony/phpunit-bridge": "^5.4|^6.4|^7.0",
