@@ -22,8 +22,8 @@
     ],
     "require": {
         "php": "^8.1",
-        "symfony/framework-bundle": "^5.4|^6.4|^7.0",
-        "symfony/twig-bundle": "^5.4|^6.4|^7.0",
+        "symfony/framework-bundle": "^5.4",
+        "symfony/twig-bundle": "^5.4",
         "twig/twig": "^3.0",
         "doctrine/orm": "^2.10|^3.0",
         "doctrine/doctrine-bundle": "^2.7",
