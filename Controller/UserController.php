@@ -8,7 +8,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 #[Route('/affiliate')]
 class UserController extends AbstractController
@@ -36,12 +35,11 @@ class UserController extends AbstractController
         return $this->render('@ShayganAffiliate/user/index.html.twig');
     }
 
-    /**
-     * @IsGranted("ROLE_USER")
-     */
     #[Route('/report', name: 'shaygan_affiliate_user_report')]
     public function reportAction(Request $request): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         $query = $this->referralRegistrationRepository->getRegistrationByUser($this->getUser());
         $pagination = $this->paginator->paginate(
             $query,

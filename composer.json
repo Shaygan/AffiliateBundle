@@ -1,6 +1,7 @@
 {
     "name": "shaygan/affiliate-bundle",
     "type": "symfony-bundle",
+    "version": "3.5.0",
     "description": "A simple Symfony Affiliate Bundle.",
     "keywords": [
         "affiliate",
