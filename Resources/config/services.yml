@@ -32,4 +32,4 @@ services:
         arguments:
             - '@Shaygan\AffiliateBundle\Entity\ReferralRegistrationRepository'
             - '@knp_paginator'
-        tags: ['controller.service_arguments']
+        tags: ['controller.service_arguments', 'container.service_subscriber']
