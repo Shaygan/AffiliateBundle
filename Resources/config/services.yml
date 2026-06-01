@@ -29,7 +29,9 @@ services:
 
     Shaygan\AffiliateBundle\Controller\UserController:
         class: Shaygan\AffiliateBundle\Controller\UserController
+        autowire: true
+        autoconfigure: true
         arguments:
             - '@Shaygan\AffiliateBundle\Entity\ReferralRegistrationRepository'
             - '@knp_paginator'
-        tags: ['controller.service_arguments', 'container.service_subscriber']
+        tags: ['controller.service_arguments']
