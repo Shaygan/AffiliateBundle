@@ -8,71 +8,57 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author Iman Ghasrfakhri <ghasrfakhri@gmail.com>
  */
-
-/**
- * AffiliateLogs
- *
- * @ORM\Table(name="affiliate_referral")
- * @ORM\Entity(repositoryClass="ReferralRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table(name: 'affiliate_referral')]
+#[ORM\Entity(repositoryClass: ReferralRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Referral
 {
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="create_at", type="datetime", nullable=false)
      */
+    #[ORM\Column(name: 'create_at', type: 'datetime', nullable: false)]
     private $createAt;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="ip", type="string", nullable=true)
      */
+    #[ORM\Column(name: 'ip', type: 'string', nullable: true)]
     private $ip;
 
     /**
      * @var integer
-     *
-     * @ORM\ManyToOne(targetEntity="Referrer", inversedBy="referrals")
      */
+    #[ORM\ManyToOne(targetEntity: Referrer::class, inversedBy: 'referrals')]
     private $referrer;
 
     /**
      * @var integer
-     *
-     * @ORM\OneToOne(targetEntity="ReferralRegistration", mappedBy="referral")
      */
+    #[ORM\OneToOne(targetEntity: ReferralRegistration::class, mappedBy: 'referral')]
     private $registration;
 
     /**
      * @var string
-     *
-     * @ORM\ManyToOne(targetEntity="ReferrerUrl")
      */
+    #[ORM\ManyToOne(targetEntity: ReferrerUrl::class)]
     private $referrerUrl;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="hit_id", type="bigint", nullable=true)
      */
+    #[ORM\Column(name: 'hit_id', type: 'bigint', nullable: true)]
     private $hitId;
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist()
     {
         $this->setCreateAt(new \DateTime);
@@ -171,7 +157,7 @@ class Referral
      *
      * @return Referral
      */
-    public function setReferrer(\Shaygan\AffiliateBundle\Entity\Referrer $referrer = null)
+    public function setReferrer(?\Shaygan\AffiliateBundle\Entity\Referrer $referrer = null)
     {
         $this->referrer = $referrer;
 
@@ -195,7 +181,7 @@ class Referral
      *
      * @return Referral
      */
-    public function setRegistration(\Shaygan\AffiliateBundle\Entity\ReferralRegistration $registration = null)
+    public function setRegistration(?\Shaygan\AffiliateBundle\Entity\ReferralRegistration $registration = null)
     {
         $this->registration = $registration;
 
@@ -220,7 +206,7 @@ class Referral
      *
      * @return Referral
      */
-    public function setReferrerUrl(\Shaygan\AffiliateBundle\Entity\ReferrerUrl $referrerUrl = null)
+    public function setReferrerUrl(?\Shaygan\AffiliateBundle\Entity\ReferrerUrl $referrerUrl = null)
     {
         $this->referrerUrl = $referrerUrl;
 

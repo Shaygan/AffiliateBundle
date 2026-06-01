@@ -9,58 +9,45 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author Iman Ghasrfakhri <ghasrfakhri@gmail.com>
  */
-
-/**
- * Affiliates
- *
- * @ORM\Table(name="affiliate_referrer_url", options={"collate"="ascii_general_ci", "charset"="ascii"})
- * @ORM\Entity(repositoryClass="ReferrerUrlRepository")
- * @ORM\HasLifecycleCallbacks()
- * 
- */
+#[ORM\Table(name: 'affiliate_referrer_url', options: ['collate' => 'ascii_general_ci', 'charset' => 'ascii'])]
+#[ORM\Entity(repositoryClass: ReferrerUrlRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class ReferrerUrl
 {
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var DateTime
-     *
-     * @ORM\Column(name="create_at", type="datetime", nullable=false)
      */
+    #[ORM\Column(name: 'create_at', type: 'datetime', nullable: false)]
     private $createAt;
 
     /**
      * @var DateTime
-     *
-     * @ORM\Column(name="last_refer_at", type="datetime", nullable=false)
      */
+    #[ORM\Column(name: 'last_refer_at', type: 'datetime', nullable: false)]
     private $lastReferAt;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="refer_count", type="integer", nullable=false)
      */
+    #[ORM\Column(name: 'refer_count', type: 'integer', nullable: false)]
     private $referCount = 1;
 
     /**
      * @var string
-     *
-     * @ORM\Column(name="url", type="string", length=767, nullable=false, unique=true)
      */
+    #[ORM\Column(name: 'url', type: 'string', length: 767, nullable: false, unique: true)]
     private $url;
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist()
     {
         $this->setCreateAt(new DateTime);

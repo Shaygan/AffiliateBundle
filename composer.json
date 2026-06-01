@@ -1,7 +1,6 @@
 {
     "name": "shaygan/affiliate-bundle",
     "type": "symfony-bundle",
-    "version": "3.6.3",
     "description": "A simple Symfony Affiliate Bundle.",
     "keywords": [
         "affiliate",
@@ -9,7 +8,8 @@
         "bundle",
         "php",
         "symfony",
-        "symfony6"
+        "symfony6",
+        "symfony7"
     ],
     "homepage": "http://i-gh.ir",
     "license": "MIT",

@@ -8,91 +8,73 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author Iman Ghasrfakhri <ghasrfakhri@gmail.com>
  */
-
-/**
- * Affiliates
- *
- * @ORM\Table(name="affiliate_purchase",
- *              indexes={
- *                      @ORM\Index(name="program", columns={"program"}),
- *              }
- * )
- * @ORM\Entity
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table(name: 'affiliate_purchase')]
+#[ORM\Index(name: 'program', columns: ['program'])]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class Purchase
 {
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="create_at", type="datetime", nullable=false)
      */
+    #[ORM\Column(name: 'create_at', type: 'datetime', nullable: false)]
     private $createAt;
 
     /**
      * @var Referrer
-     *
-     * @ORM\ManyToOne(targetEntity="Referrer", inversedBy="commissions")
      */
+    #[ORM\ManyToOne(targetEntity: Referrer::class, inversedBy: 'commissions')]
     private $referrer;
 
     /**
      * @var ReferralRegistration
-     *
-     * @ORM\ManyToOne(targetEntity="ReferralRegistration", inversedBy="commissions")
      */
+    #[ORM\ManyToOne(targetEntity: ReferralRegistration::class, inversedBy: 'commissions')]
     private $referralRegistration;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="purchase_amount", type="integer", nullable=false)
      */
+    #[ORM\Column(name: 'purchase_amount', type: 'integer', nullable: false)]
     private $purchaseAmount;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="commission_amount", type="integer", nullable=false)
      */
+    #[ORM\Column(name: 'commission_amount', type: 'integer', nullable: false)]
     private $commissionAmount;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="commission", type="float", nullable=false)
      */
+    #[ORM\Column(name: 'commission', type: 'float', nullable: false)]
     private $commission;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="order_id", type="integer", nullable=false)
      */
+    #[ORM\Column(name: 'order_id', type: 'integer', nullable: false)]
     private $orderId;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="program", type="string", nullable=false)
      */
+    #[ORM\Column(name: 'program', type: 'string', nullable: false)]
     private $program;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="type", type="string", nullable=false)
      */
+    #[ORM\Column(name: 'type', type: 'string', nullable: false)]
     private $type;
 
     const TYPE_FIXED_AMOUNT = "fixed-amount";
@@ -124,9 +106,7 @@ class Purchase
         return $this->getReferrer()->getId();
     }
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist()
     {
         $this->setCreateAt(new \DateTime);
@@ -307,7 +287,7 @@ class Purchase
      *
      * @return Purchase
      */
-    public function setReferrer(\Shaygan\AffiliateBundle\Entity\Referrer $referrer = null)
+    public function setReferrer(?\Shaygan\AffiliateBundle\Entity\Referrer $referrer = null)
     {
         $this->referrer = $referrer;
 
@@ -331,7 +311,7 @@ class Purchase
      *
      * @return Purchase
      */
-    public function setReferralRegistration(\Shaygan\AffiliateBundle\Entity\ReferralRegistration $referralRegistration = null)
+    public function setReferralRegistration(?\Shaygan\AffiliateBundle\Entity\ReferralRegistration $referralRegistration = null)
     {
         $this->referralRegistration = $referralRegistration;
 

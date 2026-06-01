@@ -12,63 +12,51 @@ use DateTime;
  * @author Iman Ghasrfakhri <ghasrfakhri@gmail.com>
  */
 
-/**
- * AffiliateLogs
- *
- * @ORM\Table(name="affiliate_referral_registration")
- * @ORM\Entity(repositoryClass="ReferralRegistrationRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table(name: 'affiliate_referral_registration')]
+#[ORM\Entity(repositoryClass: ReferralRegistrationRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class ReferralRegistration
 {
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private $id;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="create_at", type="datetime", nullable=false)
      */
+    #[ORM\Column(name: 'create_at', type: 'datetime', nullable: false)]
     private $createAt;
 
     /**
      * @var integer
-     *
-     * @ORM\OneToOne(targetEntity="Referral", inversedBy="registration")
      */
+    #[ORM\OneToOne(targetEntity: Referral::class, inversedBy: 'registration')]
     private $referral;
 
     /**
      * @var integer
-     *
-     * @ORM\ManyToOne(targetEntity="Referrer", inversedBy="referrals")
      */
+    #[ORM\ManyToOne(targetEntity: Referrer::class, inversedBy: 'referrals')]
     private $referrer;
 
     /**
      * @var integer
-     *
-     * @ORM\OneToMany(targetEntity="Purchase", mappedBy="referralRegistration")
      */
+    #[ORM\OneToMany(targetEntity: Purchase::class, mappedBy: 'referralRegistration')]
     private $commissions;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="user_id", type="integer", nullable=false)
      */
+    #[ORM\Column(name: 'user_id', type: 'integer', nullable: false)]
     private $userId;
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist()
     {
         $this->setCreateAt(new DateTime);
@@ -163,7 +151,7 @@ class ReferralRegistration
      *
      * @return ReferralRegistration
      */
-    public function setReferral(\Shaygan\AffiliateBundle\Entity\Referral $referral = null)
+    public function setReferral(?\Shaygan\AffiliateBundle\Entity\Referral $referral = null)
     {
         $this->referral = $referral;
 
@@ -187,7 +175,7 @@ class ReferralRegistration
      *
      * @return ReferralRegistration
      */
-    public function setReferrer(\Shaygan\AffiliateBundle\Entity\Referrer $referrer = null)
+    public function setReferrer(?\Shaygan\AffiliateBundle\Entity\Referrer $referrer = null)
     {
         $this->referrer = $referrer;
 

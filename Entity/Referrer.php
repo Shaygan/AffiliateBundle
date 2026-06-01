@@ -11,58 +11,43 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @author Iman Ghasrfakhri <ghasrfakhri@gmail.com>
  */
-
-/**
- * Affiliates
- *
- * @ORM\Table(name="affiliate_referrer")
- * @ORM\Entity(repositoryClass="ReferrerRepository")
- * @ORM\HasLifecycleCallbacks()
- */
+#[ORM\Table(name: 'affiliate_referrer')]
+#[ORM\Entity(repositoryClass: ReferrerRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Referrer {
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="id", type="integer", nullable=false)
-     * @ORM\Id
      */
+    #[ORM\Column(name: 'id', type: 'integer', nullable: false)]
+    #[ORM\Id]
     private $id;
 
     /**
      * @var DateTime
-     *
-     * @ORM\Column(name="create_at", type="datetime", nullable=false)
      */
+    #[ORM\Column(name: 'create_at', type: 'datetime', nullable: false)]
     private $createAt;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="refer_count", type="integer", nullable=false)
      */
+    #[ORM\Column(name: 'refer_count', type: 'integer', nullable: false)]
     private $referCount = 0;
 
     /**
      * @var integer
-     *
-     * @ORM\Column(name="signup_count", type="integer", nullable=false)
      */
+    #[ORM\Column(name: 'signup_count', type: 'integer', nullable: false)]
     private $signupCount = 0;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Referral", mappedBy="referrer")
-     */
+    #[ORM\OneToMany(targetEntity: Referral::class, mappedBy: 'referrer')]
     private $referrals;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Purchase", mappedBy="referrer")
-     */
+    #[ORM\OneToMany(targetEntity: Purchase::class, mappedBy: 'referrer')]
     private $commissions;
 
-    /**
-     * @ORM\PrePersist
-     */
+    #[ORM\PrePersist]
     public function prePersist() {
         $this->setCreateAt(new DateTime);
     }
