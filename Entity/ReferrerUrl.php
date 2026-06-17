@@ -44,7 +44,7 @@ class ReferrerUrl
     /**
      * @var string
      */
-    #[ORM\Column(name: 'url', type: 'string', length: 767, nullable: false, unique: true)]
+    #[ORM\Column(name: 'url', type: 'string', length: 2048, nullable: false, unique: true)]
     private $url;
 
     #[ORM\PrePersist]
