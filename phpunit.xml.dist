@@ -1,21 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<phpunit bootstrap="./Tests/bootstrap.php" colors="true">
-
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" bootstrap="Tests/bootstrap.php" colors="true" cacheDirectory=".phpunit.cache" failOnWarning="true" displayDetailsOnTestsThatTriggerDeprecations="true">
+    <!-- PHPUnit owns error handling on every profile; the extension gates self/direct notices. -->
+    <php><env name="SYMFONY_DEPRECATIONS_HELPER" value="disabled" force="true"/></php>
+    <extensions><bootstrap class="Shaygan\AffiliateBundle\Tests\DeprecationGateExtension"/></extensions>
+    <source ignoreSuppressionOfDeprecations="true" ignoreSuppressionOfPhpDeprecations="true"/>
     <testsuites>
-        <testsuite name="FOSUserBundle test suite">
-            <directory suffix="Test.php">./Tests</directory>
-        </testsuite>
+        <testsuite name="AffiliateBundle"><directory suffix="Test.php">Tests/Integration</directory></testsuite>
     </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>./</directory>
-            <exclude>
-                <directory>./Resources</directory>
-                <directory>./Tests</directory>
-                <directory>./vendor</directory>
-            </exclude>
-        </whitelist>
-    </filter>
 </phpunit>

@@ -41,7 +41,7 @@ class ReferralRegistration
     /**
      * @var integer
      */
-    #[ORM\ManyToOne(targetEntity: Referrer::class, inversedBy: 'referrals')]
+    #[ORM\ManyToOne(targetEntity: Referrer::class)]
     private $referrer;
 
     /**
@@ -64,7 +64,14 @@ class ReferralRegistration
 
     public function getPurchaseCountByProgram($progam)
     {
-        $criteria = Criteria::create()->where(Criteria::expr()->eq("program", $progam));
+        // Collections 2 accepts a raw-field flag; Collections 3 always uses raw
+        // fields and deprecates passing it. Collections 1 has no such parameter.
+        // Some Collections 2 releases accept the factory flag through func_get_arg,
+        // so inspect the declared constructor contract rather than the factory.
+        $criteria = (new \ReflectionMethod(Criteria::class, '__construct'))->getNumberOfParameters() >= 5
+            ? Criteria::create(true)
+            : Criteria::create();
+        $criteria->where(Criteria::expr()->eq("program", $progam));
         $programCommissions = $this->commissions->matching($criteria);
         return $programCommissions->count();
     }

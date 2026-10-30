@@ -7,9 +7,7 @@ use Shaygan\AffiliateBundle\Entity\ReferralRegistrationRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/affiliate')]
 class UserController extends AbstractController
 {
     public function __construct(
@@ -18,7 +16,6 @@ class UserController extends AbstractController
     ) {
     }
 
-    #[Route('/', name: 'shaygan_affiliate_user_index')]
     public function indexAction(Request $request): Response
     {
         if ($this->getUser()) {
@@ -35,7 +32,6 @@ class UserController extends AbstractController
         return $this->render('@ShayganAffiliate/user/index.html.twig');
     }
 
-    #[Route('/report', name: 'shaygan_affiliate_user_report')]
     public function reportAction(Request $request): Response
     {
         $this->denyAccessUnlessGranted('ROLE_USER');
