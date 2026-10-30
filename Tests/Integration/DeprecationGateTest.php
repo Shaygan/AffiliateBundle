@@ -19,7 +19,7 @@ final class DeprecationGateTest extends TestCase
         file_put_contents($wrapper.'/probe.php', '<?php function affiliate_gate_vendor_wrapper(): void { affiliate_gate_deprecated_api(); }');
 
         try {
-            foreach (['clean' => 0, 'self' => 1, 'self-unsilenced' => 1, 'direct' => 1, 'direct-unsilenced' => 1, 'indirect' => 0, 'indirect-unsilenced' => 0] as $probe => $expectedExit) {
+            foreach (['clean' => 0, 'criteria' => 0, 'self' => 1, 'self-unsilenced' => 1, 'direct' => 1, 'direct-unsilenced' => 1, 'indirect' => 0, 'indirect-unsilenced' => 0] as $probe => $expectedExit) {
                 $environment = array_merge(getenv(), [
                     'AFFILIATE_DEPRECATION_PROBE' => $probe,
                     'AFFILIATE_DEPRECATION_API' => $api.'/probe.php',
@@ -39,7 +39,7 @@ final class DeprecationGateTest extends TestCase
                 if ($expectedExit === 1) {
                     self::assertStringContainsString('Project deprecation:', $output);
                 }
-                if ($probe !== 'clean') {
+                if (!in_array($probe, ['clean', 'criteria'], true)) {
                     $message = str_starts_with($probe, 'self') ? 'affiliate gate self probe' : 'affiliate gate vendor probe';
                     self::assertStringContainsString($message, $output, 'Failing and allowed notices must remain visible.');
                 }

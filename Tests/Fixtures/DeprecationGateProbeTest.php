@@ -12,6 +12,11 @@ final class DeprecationGateProbeTest extends TestCase
         require getenv('AFFILIATE_DEPRECATION_WRAPPER');
 
         switch (getenv('AFFILIATE_DEPRECATION_PROBE')) {
+            case 'criteria':
+                \Doctrine\Deprecations\Deprecation::enableWithTriggerError();
+                $registration = new \Shaygan\AffiliateBundle\Entity\ReferralRegistration();
+                self::assertSame(0, $registration->getPurchaseCountByProgram('default'));
+                break;
             case 'self':
                 @trigger_error('affiliate gate self probe', E_USER_DEPRECATED);
                 break;
