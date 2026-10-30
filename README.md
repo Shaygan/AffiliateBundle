@@ -71,29 +71,42 @@ By default it look for ?ref=REFERRER_ID in URLs the *ref* is configurable
 
 ## Usage
 
-ShayganAffiliateBundel tracks FOSUserBundle registrations automatically and after every purchase you just need to ask the bundle for the commission payment if the referrer eligible for commission the bundle with return a commission Entity that contain the amount you have to pay to the referrer, othervise returns null.
-
+Your application's Doctrine-mapped purchase entity must implement
+`Shaygan\AffiliateBundle\Model\PurchaseInterface`: provide its identifier, referred
+user, and purchase price through `getId()`, `getReferredUser()`, and
+`getPurchasePrice()`. Create and populate that entity in your application, then
+pass it to a service with injected dependencies:
 
 ```php
-  // ... 
-  // MyOrder SHOULD implements \Shaygan\AffiliateBundle\Model\PurchaseInterface
-  $order = new \AppBundle\Entity\MyOrder();
-  $order->setOwnerUser($this->getUser());
+namespace App\Service;
 
-  $em = $this->getDoctrine()->getManager();
-  $em->persist($order);
-  $em->flush();
-  $affiliate = $this->get("shaygan_affiliate");
-  $commission = $affiliate->getPurchaseCommission($order);
-  if(null !== $commission){
-    $commissionAmount = $commission->getCommissionAmount();
-    $referrer = $commission->getReferrer();
-    $referrerUserId = $referrer->getId();
-    // You can apply the commission amount to the accont of referrer User here
-    // ...
-  }
-  //...
+use Doctrine\ORM\EntityManagerInterface;
+use Shaygan\AffiliateBundle\Entity\Purchase;
+use Shaygan\AffiliateBundle\Model\Affiliate;
+use Shaygan\AffiliateBundle\Model\PurchaseInterface;
+
+final class PurchaseCommissionHandler
+{
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private Affiliate $affiliate
+    ) {
+    }
+
+    public function record(PurchaseInterface $order): ?Purchase
+    {
+        $this->entityManager->persist($order);
+        $this->entityManager->flush();
+
+        return $this->affiliate->getPurchaseCommission($order, 'purchase');
+    }
+}
 ```
+
+Symfony can autowire this application service. The explicit `purchase` program
+matches the percentage configuration above. The result is `null` when the purchase
+is ineligible; otherwise use the returned commission's `getCommissionAmount()` and
+`getReferrer()` to apply payment through your application's own account logic.
 
 ## Testing
 
