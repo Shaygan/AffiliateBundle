@@ -88,7 +88,25 @@ ShayganAffiliateBundel tracks FOSUserBundle registrations automatically and afte
 
 ## Testing
 
-Not implemented yet
+The integration suite boots a small consumer application and tests public reporting
+services and routes with real Doctrine persistence. Install the shared Symfony 6.4 /
+DBAL 3 baseline for either ORM major using PHP 8.1:
+
+```bash
+ORM_CONSTRAINT='^2.20' bash Tests/resolve-baseline.sh
+# Or: ORM_CONSTRAINT='^3.0' bash Tests/resolve-baseline.sh
+composer test
+```
+
+Without `DATABASE_URL`, tests use a temporary SQLite database. To exercise MySQL:
+
+```bash
+DATABASE_URL='mysql://root:test@127.0.0.1:3306/affiliate_test?serverVersion=8.4&charset=utf8mb4' composer test
+```
+
+Use a dedicated disposable database: the integration suite drops and recreates the
+bundle tables before each test. GitHub Actions runs both databases for both ORM
+baseline jobs. The broader supported-version matrix is added separately.
 
 ## License
 
