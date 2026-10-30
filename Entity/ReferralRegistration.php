@@ -41,7 +41,7 @@ class ReferralRegistration
     /**
      * @var integer
      */
-    #[ORM\ManyToOne(targetEntity: Referrer::class, inversedBy: 'referrals')]
+    #[ORM\ManyToOne(targetEntity: Referrer::class)]
     private $referrer;
 
     /**

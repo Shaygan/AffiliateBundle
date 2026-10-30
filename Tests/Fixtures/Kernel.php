@@ -44,7 +44,7 @@ final class Kernel extends BaseKernel
             'firewalls' => ['main' => ['provider' => 'fixture', 'http_basic' => []]],
         ]);
         $container->services()->set(UserProvider::class);
-        $container->services()->set(HttpController::class)->public()->tag('controller.service_arguments');
+        $container->services()->set(HttpController::class)->autowire()->public()->tag('controller.service_arguments');
         $container->services()->set('logger', \Psr\Log\NullLogger::class);
         $container->extension('twig', ['strict_variables' => true]);
         $container->extension('doctrine', [
@@ -63,5 +63,6 @@ final class Kernel extends BaseKernel
         $routes->import($this->getProjectDir().'/Resources/config/routing.yml');
         $routes->add('fixture_visit', '/visit')->controller([HttpController::class, 'visit']);
         $routes->add('fixture_tracking', '/tracking')->controller([HttpController::class, 'tracking']);
+        $routes->add('fixture_register', '/register')->controller([HttpController::class, 'register']);
     }
 }
