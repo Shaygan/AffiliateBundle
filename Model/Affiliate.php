@@ -76,7 +76,7 @@ class Affiliate {
 
     private function logReferral($referrerId, Response $response) {
         $q = $this->em->createQuery(
-                'UPDATE ShayganAffiliateBundle:Referrer r SET r.referCount=r.referCount+1 WHERE r.id = :referrerId'
+                'UPDATE '.Referrer::class.' r SET r.referCount=r.referCount+1 WHERE r.id = :referrerId'
         );
         $q->setParameters(
                 array(
@@ -127,7 +127,7 @@ class Affiliate {
             $referrerUrl = $this->em->getRepository(ReferrerUrl::class)->findOneByUrl($url);
             if ($referrerUrl) {
                 $q = $this->em->createQuery(
-                        'UPDATE ShayganAffiliateBundle:ReferrerUrl r SET r.referCount=r.referCount+1 WHERE r.id = :id'
+                        'UPDATE '.ReferrerUrl::class.' r SET r.referCount=r.referCount+1 WHERE r.id = :id'
                 );
                 $q->setParameters(
                         array(

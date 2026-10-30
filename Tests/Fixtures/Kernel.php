@@ -37,13 +37,14 @@ final class Kernel extends BaseKernel
             'secret' => 'affiliate-test-secret', 'test' => true,
             'http_method_override' => false, 'handle_all_throwables' => true, 'php_errors' => ['log' => true],
             'router' => ['utf8' => true],
-            'session' => ['storage_factory_id' => 'session.storage.factory.mock_file', 'cookie_secure' => 'auto', 'cookie_samesite' => 'lax', 'handler_id' => null],
+            'session' => ['storage_factory_id' => $this->environment === 'http' ? 'session.storage.factory.native' : 'session.storage.factory.mock_file', 'save_path' => $this->getCacheDir().'/sessions', 'cookie_secure' => 'auto', 'cookie_samesite' => 'lax', 'handler_id' => null],
         ]);
         $container->extension('security', [
             'providers' => ['fixture' => ['id' => UserProvider::class]],
             'firewalls' => ['main' => ['provider' => 'fixture', 'http_basic' => []]],
         ]);
         $container->services()->set(UserProvider::class);
+        $container->services()->set(HttpController::class)->public()->tag('controller.service_arguments');
         $container->services()->set('logger', \Psr\Log\NullLogger::class);
         $container->extension('twig', ['strict_variables' => true]);
         $container->extension('doctrine', [
@@ -60,5 +61,7 @@ final class Kernel extends BaseKernel
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
         $routes->import($this->getProjectDir().'/Resources/config/routing.yml');
+        $routes->add('fixture_visit', '/visit')->controller([HttpController::class, 'visit']);
+        $routes->add('fixture_tracking', '/tracking')->controller([HttpController::class, 'tracking']);
     }
 }
