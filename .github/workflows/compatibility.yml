@@ -1,0 +1,37 @@
+name: Compatibility
+on: [push, pull_request]
+jobs:
+  baseline:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        orm: ['^2.20', '^3.0']
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: test
+          MYSQL_DATABASE: affiliate_test
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -ptest"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: pdo_sqlite, pdo_mysql
+          coverage: none
+          tools: composer:v2
+      - run: bash Tests/resolve-baseline.sh
+        env:
+          ORM_CONSTRAINT: '${{ matrix.orm }}'
+      - run: composer show --direct
+      - name: SQLite workflows
+        run: composer test
+      - name: MySQL workflows
+        run: composer test
+        env:
+          DATABASE_URL: 'mysql://root:test@127.0.0.1:3306/affiliate_test?serverVersion=8.4&charset=utf8mb4'
