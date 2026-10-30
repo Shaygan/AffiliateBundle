@@ -66,7 +66,9 @@ class ReferralRegistration
     {
         // Collections 2 accepts a raw-field flag; Collections 3 always uses raw
         // fields and deprecates passing it. Collections 1 has no such parameter.
-        $criteria = (new \ReflectionMethod(Criteria::class, 'create'))->getNumberOfParameters() > 0
+        // Some Collections 2 releases accept the factory flag through func_get_arg,
+        // so inspect the declared constructor contract rather than the factory.
+        $criteria = (new \ReflectionMethod(Criteria::class, '__construct'))->getNumberOfParameters() >= 5
             ? Criteria::create(true)
             : Criteria::create();
         $criteria->where(Criteria::expr()->eq("program", $progam));
