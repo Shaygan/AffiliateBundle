@@ -64,8 +64,12 @@ class ReferralRegistration
 
     public function getPurchaseCountByProgram($progam)
     {
-        // Match stored fields; older Collections accepts and ignores this flag.
-        $criteria = Criteria::create(true)->where(Criteria::expr()->eq("program", $progam));
+        // Collections 2 accepts a raw-field flag; Collections 3 always uses raw
+        // fields and deprecates passing it. Collections 1 has no such parameter.
+        $criteria = (new \ReflectionMethod(Criteria::class, 'create'))->getNumberOfParameters() > 0
+            ? Criteria::create(true)
+            : Criteria::create();
+        $criteria->where(Criteria::expr()->eq("program", $progam));
         $programCommissions = $this->commissions->matching($criteria);
         return $programCommissions->count();
     }
