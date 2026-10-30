@@ -6,7 +6,7 @@ The implementation specification is published as [GitHub issue #6](https://githu
 
 ## Compatibility commitments
 
-- Retain the declared PHP, Symfony, ORM, and DoctrineBundle version ranges. Verify valid dependency combinations; the ranges do not imply that every possible combination is supported upstream.
+- Retain the declared PHP, Symfony, and DoctrineBundle ranges, with the user-approved ORM 2 minimum corrected to 2.11 as recorded in [ADR 0002](adr/0002-correct-orm2-minimum.md). Verify valid dependency combinations; the ranges do not imply that every possible combination is supported upstream.
 - Preserve public service names, methods, interfaces, entity names, tables, columns, identifiers, and foreign keys.
 - Use MySQL for integration coverage and SQLite for fast checks. Do not introduce a MariaDB compatibility claim.
 - Include minimal fixes needed to boot and use the bundle on the advertised Symfony versions. Keep unrelated business behavior changes separate.
@@ -34,13 +34,13 @@ The implementation specification is published as [GitHub issue #6](https://githu
 
 ## CI coverage
 
-Use explicit Composer constraints in isolated jobs and verify dependency resolution before calling a lane supported. Cover the declared ORM lower bounds as well as current compatible releases, every advertised Symfony line, DoctrineBundle 2 and 3 where compatible, and DBAL 3 and 4 where compatible. Include DBAL 2 if the retained ORM 2/DoctrineBundle constraints resolve to it in the lower-bound lane.
+Use explicit Composer constraints in isolated jobs and verify dependency resolution before calling a lane supported. Cover the corrected ORM lower bounds as well as current compatible releases, every advertised Symfony line, DoctrineBundle 2 and 3 where compatible, and DBAL 3 and 4 where compatible. Include DBAL 2 if the retained ORM 2/DoctrineBundle constraints resolve to it in the lower-bound lane.
 
-These candidate lanes follow upstream constraints; they have not yet been resolved by Composer or executed. "Compatible" means the newest release satisfying the other constraints in that job. These are targeted compatibility checks, not a full Cartesian product of dependency versions.
+The original candidate lanes were refined during runtime verification; ORM 2.11 replaces the nonfunctional ORM 2.10 lower pairing with explicit user approval. "Compatible" means the newest release satisfying the other constraints in that job. These are targeted compatibility checks, not a full Cartesian product of dependency versions.
 
 | PHP | Symfony | ORM | DBAL | DoctrineBundle | KnpPaginator |
 | --- | --- | --- | --- | --- | --- |
-| 8.1 | 5.4 | 2.10.0 | 2 | 2.7.0 | 5 |
+| 8.1 | 5.4 | 2.11.0 | 2 | 2.7.2 | 5 |
 | 8.1 | 6.4 | Compatible 2.x | 3 | Compatible 2.x | 6 |
 | 8.1 | 5.4 | 3.0.0 | 3 | 2.13.x | 5 |
 | 8.1 | 6.4 | Compatible 3.x | 3 | Compatible 2.x | 6 |
@@ -50,11 +50,11 @@ These candidate lanes follow upstream constraints; they have not yet been resolv
 
 Run mapping, SQLite workflow, kernel startup, and MySQL integration checks in every lane. Run the ORM 2-to-3 existing-data check on a shared PHP/Symfony/DBAL baseline to distinguish the ORM upgrade from unrelated dependency changes. Composer resolution failures must be explained and the lane corrected; do not silently drop retained compatibility promises.
 
-The lower-bound jobs need different DoctrineBundle constraints: [2.7.0 excludes ORM 3](https://raw.githubusercontent.com/doctrine/DoctrineBundle/2.7.0/composer.json), while [2.13.3 excludes ORM below 2.17](https://raw.githubusercontent.com/doctrine/DoctrineBundle/2.13.3/composer.json). [ORM 2.10.0](https://raw.githubusercontent.com/doctrine/orm/2.10.0/composer.json) supports DBAL 2/3, and [ORM 3.0.0](https://raw.githubusercontent.com/doctrine/orm/3.0.0/composer.json) supports DBAL 3/4. [DoctrineBundle 3.3.2](https://raw.githubusercontent.com/doctrine/DoctrineBundle/3.3.2/composer.json) permits Symfony 8 and requires PHP 8.4, DBAL 4, and ORM 3; [Symfony 8 also requires PHP 8.4](https://raw.githubusercontent.com/symfony/framework-bundle/v8.0.0/composer.json). [KnpPaginator 5.9](https://raw.githubusercontent.com/KnpLabs/KnpPaginatorBundle/v5.9.0/composer.json) covers Symfony 5.4, while [6.10](https://raw.githubusercontent.com/KnpLabs/KnpPaginatorBundle/v6.10.0/composer.json) covers Symfony 6.4/7/8.
+The corrected lower-bound job uses [DoctrineBundle 2.7.2 with ORM 2.11](https://raw.githubusercontent.com/doctrine/DoctrineBundle/2.7.2/composer.json); [2.13.3 excludes ORM below 2.17](https://raw.githubusercontent.com/doctrine/DoctrineBundle/2.13.3/composer.json) and serves the lower ORM 3 profile instead. [ORM 3.0.0](https://raw.githubusercontent.com/doctrine/orm/3.0.0/composer.json) supports DBAL 3/4. [DoctrineBundle 3.3.2](https://raw.githubusercontent.com/doctrine/DoctrineBundle/3.3.2/composer.json) permits Symfony 8 and requires PHP 8.4, DBAL 4, and ORM 3; [Symfony 8 also requires PHP 8.4](https://raw.githubusercontent.com/symfony/framework-bundle/v8.0.0/composer.json). [KnpPaginator 5.9](https://raw.githubusercontent.com/KnpLabs/KnpPaginatorBundle/v5.9.0/composer.json) covers Symfony 5.4, while [6.10](https://raw.githubusercontent.com/KnpLabs/KnpPaginatorBundle/v6.10.0/composer.json) covers Symfony 6.4/7/8.
 
 ## Deferred business defects
 
-Configuration and `Purchase::TYPE_FIXED_AMOUNT` use `fixed-amount`, while `Affiliate` checks `fixed-price` in its calculation methods. The repeat fixed commission branch also reads `first_commission_amount`. Track these separately; ORM readiness does not establish that fixed commission calculation is correct.
+Configuration and `Purchase::TYPE_FIXED_AMOUNT` use `fixed-amount`, while `Affiliate` checks `fixed-price` in its calculation methods. The repeat fixed commission branch also reads `first_commission_amount`. Track these separately; ORM readiness does not establish that fixed commission calculation is correct. A preexisting response-recorder behavior can also restore referral session tracking from an incoming cookie after registration clears it at the public registration boundary; this request-end behavior is documented in the README and remains deferred.
 
 ## Completion criteria
 

@@ -1,3 +1,9 @@
-app:
-    resource: "@ShayganAffiliateBundle/Controller/"
-    type: attribute
+shaygan_affiliate_user_index:
+    path: /affiliate/
+    defaults:
+        _controller: 'Shaygan\AffiliateBundle\Controller\UserController::indexAction'
+
+shaygan_affiliate_user_report:
+    path: /affiliate/report
+    defaults:
+        _controller: 'Shaygan\AffiliateBundle\Controller\UserController::reportAction'
