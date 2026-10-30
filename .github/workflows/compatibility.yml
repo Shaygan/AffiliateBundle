@@ -35,3 +35,39 @@ jobs:
         run: composer test
         env:
           DATABASE_URL: 'mysql://root:test@127.0.0.1:3306/affiliate_test?serverVersion=8.4&charset=utf8mb4'
+  existing-data-upgrade:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: test
+          MYSQL_DATABASE: affiliate_upgrade
+        ports: ['3306:3306']
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -ptest"
+          --health-interval=10s --health-timeout=5s --health-retries=10
+    env:
+      DATABASE_URL: 'mysql://root:test@127.0.0.1:3306/affiliate_upgrade?serverVersion=8.4&charset=utf8mb4'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          extensions: pdo_sqlite, pdo_mysql
+          coverage: none
+          tools: composer:v2
+      - name: Resolve shared baseline with ORM 2
+        run: bash Tests/resolve-baseline.sh
+        env:
+          ORM_CONSTRAINT: '^2.20'
+      - run: composer show
+      - name: Create existing ORM 2 data
+        run: composer test:upgrade:seed
+      - name: Switch to ORM 3 on the same database
+        run: bash Tests/resolve-baseline.sh
+        env:
+          ORM_CONSTRAINT: '^3.0'
+      - run: composer show
+      - name: Read and update existing data without migrations
+        run: composer test:upgrade:verify
