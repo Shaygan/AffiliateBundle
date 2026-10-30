@@ -51,6 +51,8 @@
         }
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit",
+        "test:upgrade:seed": "php Tests/Compatibility/upgrade.php seed .phpunit.cache/orm-upgrade.json",
+        "test:upgrade:verify": "php Tests/Compatibility/upgrade.php verify .phpunit.cache/orm-upgrade.json"
     }
 }
