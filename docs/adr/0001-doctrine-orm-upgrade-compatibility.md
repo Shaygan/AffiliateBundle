@@ -6,4 +6,6 @@ Preserve the public API and database schema. Include ORM compatibility fixes, th
 
 Readiness requires mapping checks, Symfony kernel startup tests, and database integration tests covering referral recording, registration queries, and commission persistence, with CI covering both retained ORM majors. Use MySQL integration tests to exercise the existing platform-specific mappings and SQLite for fast checks. MariaDB coverage is outside this preparation work. Placeholder tests and permissive Composer constraints do not establish compatibility.
 
+The user-approved ORM 2 minimum correction is recorded in [ADR 0002](0002-correct-orm2-minimum.md); it supersedes preserving the original 2.10 lower bound.
+
 The implementation and verification plan is recorded in [the ORM 3 upgrade plan](../orm3-upgrade-plan.md). Implementation follows confirmation of the shared understanding reached during the design interview.

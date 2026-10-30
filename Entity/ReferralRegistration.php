@@ -64,7 +64,8 @@ class ReferralRegistration
 
     public function getPurchaseCountByProgram($progam)
     {
-        $criteria = Criteria::create()->where(Criteria::expr()->eq("program", $progam));
+        // Match stored fields; older Collections accepts and ignores this flag.
+        $criteria = Criteria::create(true)->where(Criteria::expr()->eq("program", $progam));
         $programCommissions = $this->commissions->matching($criteria);
         return $programCommissions->count();
     }

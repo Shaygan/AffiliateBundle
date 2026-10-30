@@ -28,7 +28,7 @@
         "symfony/security-bundle": "^5.4|^6.4|^7.0|^8.0",
         "symfony/twig-bundle": "^5.4|^6.4|^7.0|^8.0",
         "twig/twig": "^3.0",
-        "doctrine/orm": "^2.10|^3.0",
+        "doctrine/orm": "^2.11|^3.0",
         "doctrine/doctrine-bundle": "^2.7|^3.0",
         "knplabs/knp-paginator-bundle": "^5.0|^6.0"
     },

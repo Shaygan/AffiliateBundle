@@ -33,23 +33,31 @@ final class Kernel extends BaseKernel
 
     protected function configureContainer(ContainerConfigurator $container): void
     {
-        $container->extension('framework', [
+        $framework = [
             'secret' => 'affiliate-test-secret', 'test' => true,
-            'http_method_override' => false, 'handle_all_throwables' => true, 'php_errors' => ['log' => true],
+            'http_method_override' => false, 'php_errors' => ['log' => true],
             'router' => ['utf8' => true],
             'session' => ['storage_factory_id' => $this->environment === 'http' ? 'session.storage.factory.native' : 'session.storage.factory.mock_file', 'save_path' => $this->getCacheDir().'/sessions', 'cookie_secure' => 'auto', 'cookie_samesite' => 'lax', 'handler_id' => null],
-        ]);
-        $container->extension('security', [
+        ];
+        if (BaseKernel::VERSION_ID >= 60400) {
+            $framework['handle_all_throwables'] = true;
+        }
+        $container->extension('framework', $framework);
+        $security = [
             'providers' => ['fixture' => ['id' => UserProvider::class]],
             'firewalls' => ['main' => ['provider' => 'fixture', 'http_basic' => []]],
-        ]);
+        ];
+        if (BaseKernel::VERSION_ID < 60000) {
+            $security['enable_authenticator_manager'] = true;
+        }
+        $container->extension('security', $security);
         $container->services()->set(UserProvider::class);
         $container->services()->set(HttpController::class)->autowire()->public()->tag('controller.service_arguments');
         $container->services()->set('logger', \Psr\Log\NullLogger::class);
         $container->extension('twig', ['strict_variables' => true]);
         $container->extension('doctrine', [
             'dbal' => ['url' => getenv('DATABASE_URL') ?: 'sqlite:///%kernel.cache_dir%/database.sqlite'],
-            'orm' => ['auto_generate_proxy_classes' => true, 'mappings' => [
+            'orm' => ['mappings' => [
                 'Affiliate' => ['type' => 'attribute', 'dir' => $this->getProjectDir().'/Entity', 'prefix' => 'Shaygan\\AffiliateBundle\\Entity', 'is_bundle' => false],
             ]],
         ]);
