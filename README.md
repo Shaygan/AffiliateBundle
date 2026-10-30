@@ -161,7 +161,7 @@ DATABASE_URL='mysql://root:test@127.0.0.1:3306/affiliate_test?serverVersion=8.4&
 
 The resolver temporarily constrains dependencies for the selected profile without rewriting the package's declared production ranges. It prints resolved package versions; CI logs preserve that evidence. MySQL 8.4 is the integration target, with SQLite for fast checks. MariaDB compatibility is not certified. Tests replace their configured database tables, so always use a dedicated disposable database.
 
-The PHPUnit bridge fails project self/direct deprecations. Vendor-internal notices remain visible under a scoped policy so compatibility with retained older dependencies does not require disabling all deprecation checks.
+PHPUnit 10 owns error handling on every profile; the test extension uses Symfony's project/vendor classifier to turn project self/direct deprecations into failing PHPUnit runner warnings. This includes suppressed and unsuppressed notices. Vendor-to-vendor notices remain visible in PHPUnit's deprecation report and do not fail the command. The Bridge's automatic handler is explicitly disabled because Symfony 7/8 skips it with PHPUnit 10. A subprocess regression exercises the actual configured PHPUnit command for clean runs and each allowed/failing deprecation category on every compatibility profile.
 
 ## Known business limitations
 

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" bootstrap="Tests/bootstrap.php" colors="true" cacheDirectory=".phpunit.cache">
-    <!-- Fail project/direct deprecations while allowing vendor-internal notices across retained versions. -->
-    <php><env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0&amp;max[direct]=0"/></php>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd" bootstrap="Tests/bootstrap.php" colors="true" cacheDirectory=".phpunit.cache" failOnWarning="true" displayDetailsOnTestsThatTriggerDeprecations="true">
+    <!-- PHPUnit owns error handling on every profile; the extension gates self/direct notices. -->
+    <php><env name="SYMFONY_DEPRECATIONS_HELPER" value="disabled" force="true"/></php>
+    <extensions><bootstrap class="Shaygan\AffiliateBundle\Tests\DeprecationGateExtension"/></extensions>
+    <source ignoreSuppressionOfDeprecations="true" ignoreSuppressionOfPhpDeprecations="true"/>
     <testsuites>
         <testsuite name="AffiliateBundle"><directory suffix="Test.php">Tests/Integration</directory></testsuite>
     </testsuites>
